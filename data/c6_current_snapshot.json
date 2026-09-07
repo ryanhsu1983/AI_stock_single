@@ -1,8 +1,8 @@
 {
   "model_version": "c6-research-score0-pit-v2-forward-daily",
-  "snapshot_as_of": "2026-09-04",
+  "snapshot_as_of": "2026-09-07",
   "data_status": "partial_whole_share_replay_event_coverage_pending",
-  "source_manifest_hash": "b641e4282c50f2fbda86b9e88bf220642b8894c1b9fc58d07b106c681fa82d02",
+  "source_manifest_hash": "307ed833018dfb34c34723c8c4e0f8229eb247bae61bb07e03c4b16843d5bb75",
   "snapshot_rows": [
     {
       "signal_date": "2026-08-05",
@@ -867,6 +867,26 @@
       "monthly_revenue_yoy": 0.5739113833331853,
       "display_close": 3570.0,
       "planned_execution_date": "2026-09-07",
+      "source_readiness": "accepted_research_ranking_with_official_raw_display_close",
+      "source_label": "daily_C6_SCORE_0_ranking"
+    },
+    {
+      "signal_date": "2026-09-07",
+      "rank": 1,
+      "ticker": "3006",
+      "name": "晶豪科",
+      "market": "TWSE",
+      "candidate_status": "frozen_C6_eligibility_passed_and_ranked",
+      "eligibility_reason": "frozen_C6_eligibility_passed_and_ranked",
+      "score": 90.43103448275862,
+      "bottom_score": 90.0,
+      "launch_score": 75.0,
+      "stock_rs20": 0.18848118158193117,
+      "sector_rs20": 0.010892114710598477,
+      "return_60d": 0.47723233567754875,
+      "monthly_revenue_yoy": 4.910617601014743,
+      "display_close": 297.0,
+      "planned_execution_date": "2026-09-08",
       "source_readiness": "accepted_research_ranking_with_official_raw_display_close",
       "source_label": "daily_C6_SCORE_0_ranking"
     }
@@ -1915,6 +1935,54 @@
       "relative_return_pct": 0.038601406908345126,
       "reason": "official_raw_holding_mark",
       "signal_date": ""
+    },
+    {
+      "account_date": "2026-09-07",
+      "event_sequence": 1,
+      "slot_id": 1,
+      "event_type": "daily_mark",
+      "ticker": "3653",
+      "shares": 531,
+      "raw_close": 5655.0,
+      "gross_amount": 3002805.0,
+      "transaction_cost": 0.0,
+      "net_amount": 0.0,
+      "cash_after": "",
+      "relative_return_pct": 0.28797072604202256,
+      "reason": "official_raw_holding_mark",
+      "signal_date": ""
+    },
+    {
+      "account_date": "2026-09-07",
+      "event_sequence": 2,
+      "slot_id": 2,
+      "event_type": "daily_mark",
+      "ticker": "5351",
+      "shares": 20418,
+      "raw_close": 118.5,
+      "gross_amount": 2419533.0,
+      "transaction_cost": 0.0,
+      "net_amount": 0.0,
+      "cash_after": "",
+      "relative_return_pct": 0.03695758440378949,
+      "reason": "official_raw_holding_mark",
+      "signal_date": ""
+    },
+    {
+      "account_date": "2026-09-07",
+      "event_sequence": 3,
+      "slot_id": 3,
+      "event_type": "daily_mark",
+      "ticker": "3006",
+      "shares": 8701,
+      "raw_close": 297.0,
+      "gross_amount": 2584197.0,
+      "transaction_cost": 0.0,
+      "net_amount": 0.0,
+      "cash_after": "",
+      "relative_return_pct": 0.1075928827711976,
+      "reason": "official_raw_holding_mark",
+      "signal_date": ""
     }
   ],
   "slots": [
@@ -1923,7 +1991,7 @@
       "ticker": "3653",
       "shares": 531,
       "position_cost": 2331423.3307364997,
-      "raw_close": 5875.0,
+      "raw_close": 5655.0,
       "slot_cash": 1910.0025968337432
     },
     {
@@ -1931,7 +1999,7 @@
       "ticker": "5351",
       "shares": 20418,
       "position_cost": 2333299.8730041,
-      "raw_close": 112.5,
+      "raw_close": 118.5,
       "slot_cash": 33.460329233668745
     },
     {
@@ -1939,7 +2007,7 @@
       "ticker": "3006",
       "shares": 8701,
       "position_cost": 2333165.0466499375,
-      "raw_close": 278.5,
+      "raw_close": 297.0,
       "slot_cash": 168.2866833959706
     }
   ],
@@ -1947,300 +2015,300 @@
   "pending_orders": [],
   "market_rows": [
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "2301",
-      "close": 308.0,
+      "close": 299.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "2308",
-      "close": 1825.0,
+      "close": 1850.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "2317",
       "close": 256.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "2327",
-      "close": 562.0,
+      "close": 589.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "2337",
-      "close": 121.5,
+      "close": 124.5,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "2344",
-      "close": 174.0,
+      "close": 180.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "2356",
-      "close": 67.5,
+      "close": 66.1,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "2368",
-      "close": 1045.0,
+      "close": 1120.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "2375",
-      "close": 125.0,
+      "close": 127.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "2376",
-      "close": 361.0,
+      "close": 364.5,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "2382",
-      "close": 345.0,
+      "close": 347.5,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "2383",
-      "close": 5415.0,
+      "close": 5495.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "2408",
-      "close": 496.0,
+      "close": 517.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "2421",
-      "close": 178.0,
+      "close": 171.5,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "2451",
-      "close": 284.5,
+      "close": 289.5,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "2472",
-      "close": 225.0,
+      "close": 226.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "2478",
-      "close": 125.5,
+      "close": 127.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "2492",
-      "close": 298.5,
+      "close": 323.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "3006",
-      "close": 278.5,
+      "close": 297.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "3017",
-      "close": 3570.0,
+      "close": 3420.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "3026",
-      "close": 701.0,
+      "close": 771.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "3037",
-      "close": 902.0,
+      "close": 949.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "3044",
-      "close": 488.5,
+      "close": 493.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "3231",
-      "close": 198.0,
+      "close": 197.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "3532",
-      "close": 399.0,
+      "close": 403.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "3653",
-      "close": 5875.0,
+      "close": 5655.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "3706",
-      "close": 92.5,
+      "close": 92.6,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "4958",
-      "close": 463.0,
+      "close": 501.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "4967",
-      "close": 276.0,
+      "close": 277.5,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "6669",
-      "close": 2565.0,
+      "close": 2490.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "6770",
-      "close": 68.5,
+      "close": 72.9,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "8046",
-      "close": 1055.0,
+      "close": 1050.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "8271",
-      "close": 217.0,
+      "close": 222.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "3260",
-      "close": 400.5,
+      "close": 412.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "3324",
-      "close": 1485.0,
+      "close": 1440.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "3357",
-      "close": 214.0,
+      "close": 213.5,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "5351",
-      "close": 112.5,
+      "close": 118.5,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "5439",
-      "close": 261.5,
+      "close": 262.5,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "5483",
       "close": 183.5,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "6127",
-      "close": 49.05,
+      "close": 49.65,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "6173",
-      "close": 260.5,
+      "close": 286.5,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "6175",
-      "close": 71.8,
+      "close": 72.2,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "6182",
-      "close": 111.0,
+      "close": 111.5,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "6274",
-      "close": 1365.0,
+      "close": 1370.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "6284",
-      "close": 79.1,
+      "close": 79.9,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "6488",
-      "close": 981.0,
+      "close": 971.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "8043",
-      "close": 142.0,
+      "close": 144.0,
       "source_hash": "nan"
     },
     {
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ticker": "8299",
-      "close": 2015.0,
+      "close": 2095.0,
       "source_hash": "nan"
     }
   ],
-  "notes": "C6固定score0排名與三槽官方收盤估值更新至2026-09-04；公司行動完整權威清冊仍待確認。",
+  "notes": "C6固定score0排名與三槽官方收盤估值更新至2026-09-07；公司行動完整權威清冊仍待確認。",
   "coverage": {
-    "ranking_snapshot_as_of": "2026-09-04",
-    "accounting_snapshot_as_of": "2026-09-04",
-    "ranking_rows": 61,
-    "ledger_rows": 63,
+    "ranking_snapshot_as_of": "2026-09-07",
+    "accounting_snapshot_as_of": "2026-09-07",
+    "ranking_rows": 62,
+    "ledger_rows": 66,
     "future_data_violation_count": 0
   },
   "formal_model_changed": false,
@@ -2248,6 +2316,6 @@
   "active_in_trade_decision": true,
   "report_changed": true,
   "not_live_rule": true,
-  "ranking_snapshot_as_of": "2026-09-04",
-  "accounting_snapshot_as_of": "2026-09-04"
+  "ranking_snapshot_as_of": "2026-09-07",
+  "accounting_snapshot_as_of": "2026-09-07"
 }

@@ -7,7 +7,7 @@ class ActualValuationTests(unittest.TestCase):
     def run_value(self, **changes):
         args = dict(holdings=[{'ticker': '2327', 'units': 4000, 'entry_date': '2026-08-31'}],
                     market_rows=[{'ticker': '2327', 'date': '2026-09-04', 'close': 562,
-                                  'source_hash': 'official-response'}],
+                                  'source_hash': 'a' * 64}],
                     as_of='2026-09-04', cash=200000, cash_confirmed=False,
                     event_coverage={'2327': {'accepted': True, 'start': '2026-08-31',
                                             'end': '2026-09-04', 'evidence_hash': 'review',
@@ -23,6 +23,12 @@ class ActualValuationTests(unittest.TestCase):
 
     def test_missing_events_blocks_nav(self):
         self.assertIsNone(self.run_value(event_coverage={})['nav'])
+
+    def test_nan_source_is_not_authority(self):
+        for missing in ('nan', 'None', '', None):
+            self.assertIsNone(self.run_value(market_rows=[{
+                'ticker': '2327', 'date': '2026-09-04', 'close': 562,
+                'source_hash': missing}])['nav'])
 
     def test_stale_price_is_not_carried(self):
         self.assertIsNone(self.run_value(market_rows=[{'ticker': '2327', 'date': '2026-09-03',

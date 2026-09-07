@@ -310,7 +310,10 @@ def load_official_prices_and_turnover(
         cached.to_csv(cached_path, index=False, compression="gzip")
     if not cached.empty:
         turnover = cached[["date", "ticker", "name", "market", "turnover_value"]].copy()
-        display = cached[["date", "ticker", "name", "market", "close"]].copy()
+        display_columns = ["date", "ticker", "name", "market", "close"]
+        display_columns += [column for column in ("source_hash", "source_url", "price_basis", "retrieved_at_utc")
+                            if column in cached.columns]
+        display = cached[display_columns].copy()
     else:
         turnover = pd.DataFrame(columns=["date", "ticker", "name", "market", "turnover_value"])
         display_path = source_repo / STATIC_PRICE / "current_layer0_raw_display_close_20260721.csv"

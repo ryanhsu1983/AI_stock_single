@@ -2,7 +2,13 @@
 from __future__ import annotations
 
 import math
+import re
 from datetime import date
+
+
+def valid_source_hash(value: object) -> bool:
+    """Only an actual SHA256 digest is evidence, not stringified NaN."""
+    return isinstance(value, str) and re.fullmatch(r'[0-9a-fA-F]{64}', value) is not None
 
 
 def value_account(holdings: list[dict], market_rows: list[dict], as_of: str,
@@ -35,7 +41,7 @@ def value_account(holdings: list[dict], market_rows: list[dict], as_of: str,
         price = rows[0].get('close') if len(rows) == 1 else None
         accepted = (not isinstance(price, bool) and isinstance(price, (int, float))
                     and math.isfinite(price) and price > 0
-                    and bool(rows[0].get('source_hash')) if len(rows) == 1 else False)
+                    and valid_source_hash(rows[0].get('source_hash')) if len(rows) == 1 else False)
         if not accepted:
             blockers.append(f'{ticker}:exact_official_mark_missing_or_ambiguous')
         coverage = event_coverage.get(ticker, {})

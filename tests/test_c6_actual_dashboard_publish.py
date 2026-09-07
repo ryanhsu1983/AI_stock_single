@@ -6,10 +6,27 @@ from rotation_radar import sheets_retry
 
 
 class ActualSignalsTests(unittest.TestCase):
+    def test_observations_are_not_fills_and_do_not_claim_exit_readiness(self):
+        rows = [[], []] + [[i, f'{ticker} 名稱｜10股', 100, 1000]
+                           for i, ticker in enumerate(['2327', '2376', '3037', '6488'], 1)]
+        payload = {'ranking_snapshot_as_of': '2026-09-07', 'market_rows': [
+            {'ticker': ticker, 'date': '2026-09-07', 'close': 110, 'source_hash': 'a' * 64}
+            for ticker in ['2327', '2376', '3037', '6488']]}
+        observations = actual.daily_observation_rows(rows, payload)
+        self.assertEqual(len(observations), 4)
+        self.assertEqual(observations[0][8], 1100)
+        self.assertAlmostEqual(observations[0][16], .1)
+        self.assertEqual(observations[0][10:14], ['', '', '', ''])
+        self.assertIn('非成交', observations[0][2])
+        self.assertIn('完整退出條件待接通', observations[0][17])
+        payload['market_rows'][0]['source_hash'] = 'nan'
+        with self.assertRaises(ValueError):
+            actual.daily_observation_rows(rows, payload)
+
     def test_quotes_require_exact_date_price_and_lineage(self):
         rows = [[], []] + [[1, f'{ticker} 名稱'] for ticker in ['2327', '2376', '3037', '6488']]
         value = actual.holding_quote_text(rows, {'ranking_snapshot_as_of': '2026-09-04', 'market_rows': [
-            {'ticker': '2327', 'date': '2026-09-04', 'close': 100, 'source_hash': 'hash'},
+            {'ticker': '2327', 'date': '2026-09-04', 'close': 100, 'source_hash': 'a' * 64},
             {'ticker': '2376', 'date': '2026-09-03', 'close': 101, 'source_hash': 'hash'},
             {'ticker': '3037', 'date': '2026-09-04', 'close': 102, 'source_hash': ''},
         ]})

@@ -1,13 +1,28 @@
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 import pandas as pd
 
 from rotation_radar.base_cycle_daily_report import load_state, render_html, update_state
+from rotation_radar.base_cycle_daily_report import load_official_prices_and_turnover
 
 
 class BaseCycleDailyReportTests(unittest.TestCase):
+    def test_official_display_preserves_price_lineage(self):
+        with tempfile.TemporaryDirectory() as folder:
+            cache = Path(folder)
+            (cache / 'official_recent_full_market.csv.gz').touch()
+            row = {'date': '2026-09-07', 'ticker': '2327', 'name': '國巨',
+                   'market': 'TWSE', 'close': 589, 'turnover_value': 1000,
+                   'source_hash': 'a' * 64, 'source_url': 'official'}
+            with patch('rotation_radar.base_cycle_daily_report.pd.read_csv', return_value=pd.DataFrame([row])):
+                display, _ = load_official_prices_and_turnover(source_repo=cache,
+                    target=pd.Timestamp('2026-09-07'), current=pd.DataFrame(), source_cache=cache, offline=True)
+            self.assertEqual(display.iloc[0].source_hash, 'a' * 64)
+            self.assertEqual(display.iloc[0].source_url, 'official')
+
     def top10(self, tickers):
         return pd.DataFrame([
             {

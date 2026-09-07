@@ -1,13 +1,28 @@
 import unittest
+import json
+from pathlib import Path
+from tempfile import TemporaryDirectory
 from datetime import date
 from unittest.mock import patch
 
 import pandas as pd
 
-from rotation_radar.c6_daily_pipeline import advance_account, rank_score0
+from rotation_radar.c6_daily_pipeline import advance_account, rank_score0, load_official_0050
 
 
 class C6DailyPipelineTests(unittest.TestCase):
+    @patch('rotation_radar.c6_daily_pipeline.urlopen')
+    def test_current_month_cache_refreshes_for_new_session(self, fetch):
+        with TemporaryDirectory() as folder:
+            cached = Path(folder) / '0050-2026-09.json'
+            cached.write_text(json.dumps({'data': [['115/09/04', '', '1000', '', '', '', '100']]}), encoding='utf-8')
+            fetch.return_value.__enter__.return_value.read.return_value = json.dumps(
+                {'data': [['115/09/07', '', '1100', '', '', '', '101']]}
+            ).encode()
+            result = load_official_0050(pd.Timestamp('2026-09-01'), pd.Timestamp('2026-09-07'), Path(folder))
+            self.assertEqual(result.iloc[0]['close'], 101)
+            fetch.assert_called_once()
+
     def test_score0_ranking_applies_gates_and_lexical_tiebreak(self):
         day = pd.Timestamp("2026-09-04")
         liquidity = pd.DataFrame([

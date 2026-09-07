@@ -144,7 +144,9 @@ def load_official_0050(start: pd.Timestamp, target: pd.Timestamp, cache_dir: Pat
             "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY"
             f"?date={month.strftime('%Y%m')}01&stockNo=0050&response=json"
         )
-        if path.exists():
+        # An open-month response is incomplete for later trading sessions.
+        # Online runs refresh it; offline runs must retain the readiness gate.
+        if path.exists() and (offline or month < target.to_period("M")):
             payload = json.loads(path.read_text(encoding="utf-8"))
         elif offline:
             continue

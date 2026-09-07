@@ -93,7 +93,7 @@
     "status": "holding",
     "pending_exit": null,
     "simulation_position": true,
-    "last_report_date": "2026-09-04",
+    "last_report_date": "2026-09-07",
     "daily_marks": {
       "2026-08-19": {
         "close": 19.9,
@@ -226,6 +226,17 @@
         "peak_after_cost_return_pct": 3.8225649209661094,
         "trailing_drawdown_pct": -1.682692307692335,
         "rolling_5td_return_pct": 0.9876543209876409
+      },
+      "2026-09-07": {
+        "close": 20.45,
+        "daily_return_pct": 0.0,
+        "d_index": 12,
+        "model_td": 13,
+        "cumulative_return_pct": 2.7638190954773822,
+        "after_cost_return_pct": 2.0755506073921293,
+        "peak_after_cost_return_pct": 3.8225649209661094,
+        "trailing_drawdown_pct": -1.682692307692335,
+        "rolling_5td_return_pct": 0.49140049140048436
       }
     }
   },

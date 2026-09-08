@@ -11,6 +11,20 @@ from rotation_radar.c6_daily_pipeline import advance_account, rank_score0, load_
 
 
 class C6DailyPipelineTests(unittest.TestCase):
+    @patch('rotation_radar.c6_daily_pipeline.fetch_twse_calendar', return_value=(set(), {date(2026, 1, 1)}))
+    @patch('rotation_radar.c6_daily_pipeline.urlopen')
+    def test_incomplete_past_month_refreshes_but_complete_month_is_reused(self, fetch, calendar):
+        with TemporaryDirectory() as folder:
+            root = Path(folder)
+            def data(days):
+                return {'data': [[d, '', '1000', '', '', '', '100'] for d in days]}
+            (root / '0050-2026-07.json').write_text(json.dumps(data(['115/07/30'])), encoding='utf-8')
+            (root / '0050-2026-08.json').write_text(json.dumps(data(['115/08/03'])), encoding='utf-8')
+            fetch.return_value.__enter__.return_value.read.return_value = json.dumps(data(['115/07/30', '115/07/31'])).encode()
+            result = load_official_0050(pd.Timestamp('2026-07-30'), pd.Timestamp('2026-08-03'), root)
+            self.assertEqual(len(result), 3)
+            fetch.assert_called_once()
+
     @patch('rotation_radar.c6_daily_pipeline.fetch_twse_calendar', return_value=(set(), {date(2026, 7, 2)}))
     def test_actual_history_requires_complete_benchmark_sessions(self, calendar):
         frame = pd.DataFrame([
@@ -22,8 +36,9 @@ class C6DailyPipelineTests(unittest.TestCase):
         self.assertEqual(result['official_rows'][0]['source_hash'], 'b' * 64)
         self.assertFalse(actual_history_payload(frame, pd.Timestamp('2026-07-03'))['calendar_complete'])
 
+    @patch('rotation_radar.c6_daily_pipeline.fetch_twse_calendar', return_value=(set(), {date(2026, 1, 1)}))
     @patch('rotation_radar.c6_daily_pipeline.urlopen')
-    def test_current_month_cache_refreshes_for_new_session(self, fetch):
+    def test_current_month_cache_refreshes_for_new_session(self, fetch, calendar):
         with TemporaryDirectory() as folder:
             cached = Path(folder) / '0050-2026-09.json'
             cached.write_text(json.dumps({'data': [['115/09/04', '', '1000', '', '', '', '100']]}), encoding='utf-8')

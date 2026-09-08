@@ -138,6 +138,7 @@ def _period_before(target: pd.Timestamp, months: int) -> str:
 
 def load_official_0050(start: pd.Timestamp, target: pd.Timestamp, cache_dir: Path, offline: bool = False) -> pd.DataFrame:
     cache_dir.mkdir(parents=True, exist_ok=True)
+    open_dates, closed_dates = (set(), None) if offline else fetch_twse_calendar()
     rows = []
     for month in pd.period_range(start=start, end=target, freq="M"):
         path = cache_dir / f"0050-{month.strftime('%Y-%m')}.json"
@@ -145,13 +146,20 @@ def load_official_0050(start: pd.Timestamp, target: pd.Timestamp, cache_dir: Pat
             "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY"
             f"?date={month.strftime('%Y%m')}01&stockNo=0050&response=json"
         )
-        # An open-month response is incomplete for later trading sessions.
-        # Online runs refresh it; offline runs must retain the readiness gate.
-        if path.exists() and (offline or month < target.to_period("M")):
-            payload = json.loads(path.read_text(encoding="utf-8"))
-        elif offline:
+        payload = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+        cached_dates = set()
+        for item in payload.get('data', []):
+            year, month_number, day = (int(value) for value in item[0].split('/'))
+            cached_dates.add(date(year + 1911, month_number, day))
+        required_dates = set() if closed_dates is None else {
+            day.date() for day in pd.date_range(max(start, month.start_time), min(target, month.end_time))
+            if is_trading_day(day.date(), open_dates, closed_dates)}
+        cache_complete = bool(required_dates) and required_dates.issubset(cached_dates)
+        # A previously open month may have been cached before its last session.
+        # Reuse only complete caches; never assume a past month is complete.
+        if offline and not path.exists():
             continue
-        else:
+        if not offline and not cache_complete:
             with urlopen(Request(url, headers={"User-Agent": "Mozilla/5.0"}), timeout=30) as response:
                 payload = json.loads(response.read().decode("utf-8-sig"))
             path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")

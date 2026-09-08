@@ -21,6 +21,11 @@ class ActualSignalsTests(unittest.TestCase):
         self.assertEqual(observations[0][14], 2)
         self.assertIn('最高原始收盤115元', observations[0][17])
         self.assertIn('+20%後回撤12%待資料', observations[0][17])
+        payload['actual_holding_history'].update(calendar_complete=False, calendar_loaded=True,
+                                                 missing_session_dates=['2026-07-10'])
+        self.assertEqual(actual.daily_observation_rows(rows, payload, ledger)[0][14], 2)
+        payload['actual_holding_history']['missing_session_dates'] = ['2026-09-04']
+        self.assertEqual(actual.daily_observation_rows(rows, payload, ledger)[0][14], '待完整交易日資料')
         payload['actual_holding_history']['end'] = '2026-09-08'
         self.assertEqual(actual.daily_observation_rows(rows, payload, ledger)[0][14], '待完整交易日資料')
 

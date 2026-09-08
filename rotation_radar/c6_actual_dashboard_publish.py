@@ -52,10 +52,13 @@ def daily_observation_rows(account_rows: list, payload: dict, actual_ledger: lis
         pnl = round(units * (close - cost), 2)
         history = payload.get('actual_holding_history', {})
         entry = entries.get(ticker)
+        calendar_complete = history.get('calendar_complete') is True
+        if history.get('calendar_loaded') is True and entry and isinstance(history.get('missing_session_dates'), list):
+            calendar_complete = not any(entry <= day <= target for day in history['missing_session_dates'])
         tracking = holding_history_observation(
             ticker=ticker, entry_date=entry, as_of=target,
             official_rows=history.get('official_rows', []), trading_dates=history.get('trading_dates', []),
-            calendar_complete=history.get('calendar_complete') is True and history.get('end') == target,
+            calendar_complete=calendar_complete and history.get('end') == target,
         ) if entry else {}
         td = tracking.get('holding_td')
         high = tracking.get('raw_close_high')

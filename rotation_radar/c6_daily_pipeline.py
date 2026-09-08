@@ -475,6 +475,8 @@ def actual_history_payload(official: pd.DataFrame, target: pd.Timestamp) -> dict
         .itertuples(index=False) if pd.notna(row.close)]
     return {'start': start.date().isoformat(), 'end': target.date().isoformat(),
             'calendar_complete': complete, 'trading_dates': sessions, 'official_rows': rows,
+            'calendar_loaded': closed_dates is not None,
+            'missing_session_dates': sorted(set(sessions) - benchmark_dates),
             'event_basis_ready': False}
 
 

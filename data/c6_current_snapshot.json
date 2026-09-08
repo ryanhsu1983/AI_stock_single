@@ -1,8 +1,8 @@
 {
   "model_version": "c6-research-score0-pit-v2-forward-daily",
-  "snapshot_as_of": "2026-09-07",
+  "snapshot_as_of": "2026-09-08",
   "data_status": "partial_whole_share_replay_event_coverage_pending",
-  "source_manifest_hash": "48a041e122cb3c8e4b1dff227980a777323db16e641f44e6089f472d3ca9d7d5",
+  "source_manifest_hash": "32daab1e42d00dcc066058f67b36a9253f4cdaf4004765dfc3094600f48bb7a5",
   "snapshot_rows": [
     {
       "signal_date": "2026-08-05",
@@ -887,6 +887,46 @@
       "monthly_revenue_yoy": 4.910617601014743,
       "display_close": 297.0,
       "planned_execution_date": "2026-09-08",
+      "source_readiness": "accepted_research_ranking_with_official_raw_display_close",
+      "source_label": "daily_C6_SCORE_0_ranking"
+    },
+    {
+      "signal_date": "2026-09-08",
+      "rank": 1,
+      "ticker": "3006",
+      "name": "晶豪科",
+      "market": "TWSE",
+      "candidate_status": "frozen_C6_eligibility_passed_and_ranked",
+      "eligibility_reason": "frozen_C6_eligibility_passed_and_ranked",
+      "score": 90.60344827586206,
+      "bottom_score": 90.0,
+      "launch_score": 70.0,
+      "stock_rs20": 0.10869758548623776,
+      "sector_rs20": -0.01864952907017914,
+      "return_60d": 0.46654280109319957,
+      "monthly_revenue_yoy": 4.910617601014743,
+      "display_close": 298.5,
+      "planned_execution_date": "2026-09-09",
+      "source_readiness": "accepted_research_ranking_with_official_raw_display_close",
+      "source_label": "daily_C6_SCORE_0_ranking"
+    },
+    {
+      "signal_date": "2026-09-08",
+      "rank": 2,
+      "ticker": "2344",
+      "name": "華邦電",
+      "market": "TWSE",
+      "candidate_status": "frozen_C6_eligibility_passed_and_ranked",
+      "eligibility_reason": "frozen_C6_eligibility_passed_and_ranked",
+      "score": 77.5,
+      "bottom_score": 65.0,
+      "launch_score": 70.0,
+      "stock_rs20": 0.0511360459785537,
+      "sector_rs20": -0.01864952907017914,
+      "return_60d": 0.20127795527156556,
+      "monthly_revenue_yoy": 2.9154754061439485,
+      "display_close": 188.0,
+      "planned_execution_date": "2026-09-09",
       "source_readiness": "accepted_research_ranking_with_official_raw_display_close",
       "source_label": "daily_C6_SCORE_0_ranking"
     }
@@ -1983,6 +2023,54 @@
       "relative_return_pct": 0.1075928827711976,
       "reason": "official_raw_holding_mark",
       "signal_date": ""
+    },
+    {
+      "account_date": "2026-09-08",
+      "event_sequence": 1,
+      "slot_id": 1,
+      "event_type": "daily_mark",
+      "ticker": "3653",
+      "shares": 531,
+      "raw_close": 5550.0,
+      "gross_amount": 2947050.0,
+      "transaction_cost": 0.0,
+      "net_amount": 0.0,
+      "cash_after": "",
+      "relative_return_pct": 0.26405615022691875,
+      "reason": "official_raw_holding_mark",
+      "signal_date": ""
+    },
+    {
+      "account_date": "2026-09-08",
+      "event_sequence": 2,
+      "slot_id": 2,
+      "event_type": "daily_mark",
+      "ticker": "5351",
+      "shares": 20418,
+      "raw_close": 117.0,
+      "gross_amount": 2388906.0,
+      "transaction_cost": 0.0,
+      "net_amount": 0.0,
+      "cash_after": "",
+      "relative_return_pct": 0.02383153903158952,
+      "reason": "official_raw_holding_mark",
+      "signal_date": ""
+    },
+    {
+      "account_date": "2026-09-08",
+      "event_sequence": 3,
+      "slot_id": 3,
+      "event_type": "daily_mark",
+      "ticker": "3006",
+      "shares": 8701,
+      "raw_close": 298.5,
+      "gross_amount": 2597248.5,
+      "transaction_cost": 0.0,
+      "net_amount": 0.0,
+      "cash_after": "",
+      "relative_return_pct": 0.11318678621953704,
+      "reason": "official_raw_holding_mark",
+      "signal_date": ""
     }
   ],
   "slots": [
@@ -1991,7 +2079,7 @@
       "ticker": "3653",
       "shares": 531,
       "position_cost": 2331423.3307364997,
-      "raw_close": 5655.0,
+      "raw_close": 5550.0,
       "slot_cash": 1910.0025968337432
     },
     {
@@ -1999,7 +2087,7 @@
       "ticker": "5351",
       "shares": 20418,
       "position_cost": 2333299.8730041,
-      "raw_close": 118.5,
+      "raw_close": 117.0,
       "slot_cash": 33.460329233668745
     },
     {
@@ -2007,7 +2095,7 @@
       "ticker": "3006",
       "shares": 8701,
       "position_cost": 2333165.0466499375,
-      "raw_close": 297.0,
+      "raw_close": 298.5,
       "slot_cash": 168.2866833959706
     }
   ],
@@ -2015,7 +2103,7 @@
   "pending_orders": [],
   "actual_holding_history": {
     "start": "2026-07-01",
-    "end": "2026-09-07",
+    "end": "2026-09-08",
     "calendar_complete": false,
     "trading_dates": [
       "2026-07-01",
@@ -2066,7 +2154,8 @@
       "2026-09-02",
       "2026-09-03",
       "2026-09-04",
-      "2026-09-07"
+      "2026-09-07",
+      "2026-09-08"
     ],
     "official_rows": [
       {
@@ -11320,6 +11409,294 @@
         "date": "2026-09-07",
         "close": 2095.0,
         "source_hash": "1ac6b230a66640acdebf8424cd48ae534087431b7c7afd49b560f7be8d48e299"
+      },
+      {
+        "ticker": "2301",
+        "date": "2026-09-08",
+        "close": 291.0,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "2308",
+        "date": "2026-09-08",
+        "close": 1805.0,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "2317",
+        "date": "2026-09-08",
+        "close": 251.5,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "2327",
+        "date": "2026-09-08",
+        "close": 567.0,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "2337",
+        "date": "2026-09-08",
+        "close": 126.0,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "2344",
+        "date": "2026-09-08",
+        "close": 188.0,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "2356",
+        "date": "2026-09-08",
+        "close": 64.0,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "2368",
+        "date": "2026-09-08",
+        "close": 1075.0,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "2375",
+        "date": "2026-09-08",
+        "close": 123.0,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "2376",
+        "date": "2026-09-08",
+        "close": 357.0,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "2382",
+        "date": "2026-09-08",
+        "close": 328.0,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "2383",
+        "date": "2026-09-08",
+        "close": 5340.0,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "2408",
+        "date": "2026-09-08",
+        "close": 531.0,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "2421",
+        "date": "2026-09-08",
+        "close": 168.0,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "2451",
+        "date": "2026-09-08",
+        "close": 286.0,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "2472",
+        "date": "2026-09-08",
+        "close": 215.5,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "2478",
+        "date": "2026-09-08",
+        "close": 121.0,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "2492",
+        "date": "2026-09-08",
+        "close": 318.5,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "3006",
+        "date": "2026-09-08",
+        "close": 298.5,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "3017",
+        "date": "2026-09-08",
+        "close": 3285.0,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "3026",
+        "date": "2026-09-08",
+        "close": 747.0,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "3037",
+        "date": "2026-09-08",
+        "close": 954.0,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "3044",
+        "date": "2026-09-08",
+        "close": 484.0,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "3231",
+        "date": "2026-09-08",
+        "close": 186.5,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "3532",
+        "date": "2026-09-08",
+        "close": 398.0,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "3653",
+        "date": "2026-09-08",
+        "close": 5550.0,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "3706",
+        "date": "2026-09-08",
+        "close": 91.3,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "4958",
+        "date": "2026-09-08",
+        "close": 505.0,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "4967",
+        "date": "2026-09-08",
+        "close": 280.5,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "6669",
+        "date": "2026-09-08",
+        "close": 2340.0,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "6770",
+        "date": "2026-09-08",
+        "close": 72.4,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "8046",
+        "date": "2026-09-08",
+        "close": 1025.0,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "8271",
+        "date": "2026-09-08",
+        "close": 219.5,
+        "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
+      },
+      {
+        "ticker": "3260",
+        "date": "2026-09-08",
+        "close": 414.0,
+        "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
+      },
+      {
+        "ticker": "3324",
+        "date": "2026-09-08",
+        "close": 1340.0,
+        "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
+      },
+      {
+        "ticker": "3357",
+        "date": "2026-09-08",
+        "close": 206.5,
+        "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
+      },
+      {
+        "ticker": "5351",
+        "date": "2026-09-08",
+        "close": 117.0,
+        "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
+      },
+      {
+        "ticker": "5439",
+        "date": "2026-09-08",
+        "close": 257.5,
+        "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
+      },
+      {
+        "ticker": "5483",
+        "date": "2026-09-08",
+        "close": 180.0,
+        "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
+      },
+      {
+        "ticker": "6127",
+        "date": "2026-09-08",
+        "close": 48.2,
+        "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
+      },
+      {
+        "ticker": "6173",
+        "date": "2026-09-08",
+        "close": 273.5,
+        "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
+      },
+      {
+        "ticker": "6175",
+        "date": "2026-09-08",
+        "close": 70.4,
+        "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
+      },
+      {
+        "ticker": "6182",
+        "date": "2026-09-08",
+        "close": 109.0,
+        "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
+      },
+      {
+        "ticker": "6274",
+        "date": "2026-09-08",
+        "close": 1345.0,
+        "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
+      },
+      {
+        "ticker": "6284",
+        "date": "2026-09-08",
+        "close": 77.6,
+        "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
+      },
+      {
+        "ticker": "6488",
+        "date": "2026-09-08",
+        "close": 955.0,
+        "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
+      },
+      {
+        "ticker": "8043",
+        "date": "2026-09-08",
+        "close": 138.0,
+        "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
+      },
+      {
+        "ticker": "8299",
+        "date": "2026-09-08",
+        "close": 2085.0,
+        "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
       }
     ],
     "calendar_loaded": true,
@@ -11330,300 +11707,300 @@
   },
   "market_rows": [
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "2301",
-      "close": 299.0,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 291.0,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "2308",
-      "close": 1850.0,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 1805.0,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "2317",
-      "close": 256.0,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 251.5,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "2327",
-      "close": 589.0,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 567.0,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "2337",
-      "close": 124.5,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 126.0,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "2344",
-      "close": 180.0,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 188.0,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "2356",
-      "close": 66.1,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 64.0,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "2368",
-      "close": 1120.0,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 1075.0,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "2375",
-      "close": 127.0,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 123.0,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "2376",
-      "close": 364.5,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 357.0,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "2382",
-      "close": 347.5,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 328.0,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "2383",
-      "close": 5495.0,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 5340.0,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "2408",
-      "close": 517.0,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 531.0,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "2421",
-      "close": 171.5,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 168.0,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "2451",
-      "close": 289.5,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 286.0,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "2472",
-      "close": 226.0,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 215.5,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "2478",
-      "close": 127.0,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 121.0,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "2492",
-      "close": 323.0,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 318.5,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "3006",
-      "close": 297.0,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 298.5,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "3017",
-      "close": 3420.0,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 3285.0,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "3026",
-      "close": 771.0,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 747.0,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "3037",
-      "close": 949.0,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 954.0,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "3044",
-      "close": 493.0,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 484.0,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "3231",
-      "close": 197.0,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 186.5,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "3532",
-      "close": 403.0,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 398.0,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "3653",
-      "close": 5655.0,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 5550.0,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "3706",
-      "close": 92.6,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 91.3,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "4958",
-      "close": 501.0,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 505.0,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "4967",
-      "close": 277.5,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 280.5,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "6669",
-      "close": 2490.0,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 2340.0,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "6770",
-      "close": 72.9,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 72.4,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "8046",
-      "close": 1050.0,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 1025.0,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "8271",
-      "close": 222.0,
-      "source_hash": "ec992c6eee472346e325e3f2250439d40776583e0074e069b9cebc4d22acedb0"
+      "close": 219.5,
+      "source_hash": "e2a33197e098e9fce6fe2bf4e53408be738e3537a9a5f5730cefae9ff2b5ebe7"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "3260",
-      "close": 412.0,
-      "source_hash": "1ac6b230a66640acdebf8424cd48ae534087431b7c7afd49b560f7be8d48e299"
+      "close": 414.0,
+      "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "3324",
-      "close": 1440.0,
-      "source_hash": "1ac6b230a66640acdebf8424cd48ae534087431b7c7afd49b560f7be8d48e299"
+      "close": 1340.0,
+      "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "3357",
-      "close": 213.5,
-      "source_hash": "1ac6b230a66640acdebf8424cd48ae534087431b7c7afd49b560f7be8d48e299"
+      "close": 206.5,
+      "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "5351",
-      "close": 118.5,
-      "source_hash": "1ac6b230a66640acdebf8424cd48ae534087431b7c7afd49b560f7be8d48e299"
+      "close": 117.0,
+      "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "5439",
-      "close": 262.5,
-      "source_hash": "1ac6b230a66640acdebf8424cd48ae534087431b7c7afd49b560f7be8d48e299"
+      "close": 257.5,
+      "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "5483",
-      "close": 183.5,
-      "source_hash": "1ac6b230a66640acdebf8424cd48ae534087431b7c7afd49b560f7be8d48e299"
+      "close": 180.0,
+      "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "6127",
-      "close": 49.65,
-      "source_hash": "1ac6b230a66640acdebf8424cd48ae534087431b7c7afd49b560f7be8d48e299"
+      "close": 48.2,
+      "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "6173",
-      "close": 286.5,
-      "source_hash": "1ac6b230a66640acdebf8424cd48ae534087431b7c7afd49b560f7be8d48e299"
+      "close": 273.5,
+      "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "6175",
-      "close": 72.2,
-      "source_hash": "1ac6b230a66640acdebf8424cd48ae534087431b7c7afd49b560f7be8d48e299"
+      "close": 70.4,
+      "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "6182",
-      "close": 111.5,
-      "source_hash": "1ac6b230a66640acdebf8424cd48ae534087431b7c7afd49b560f7be8d48e299"
+      "close": 109.0,
+      "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "6274",
-      "close": 1370.0,
-      "source_hash": "1ac6b230a66640acdebf8424cd48ae534087431b7c7afd49b560f7be8d48e299"
+      "close": 1345.0,
+      "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "6284",
-      "close": 79.9,
-      "source_hash": "1ac6b230a66640acdebf8424cd48ae534087431b7c7afd49b560f7be8d48e299"
+      "close": 77.6,
+      "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "6488",
-      "close": 971.0,
-      "source_hash": "1ac6b230a66640acdebf8424cd48ae534087431b7c7afd49b560f7be8d48e299"
+      "close": 955.0,
+      "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "8043",
-      "close": 144.0,
-      "source_hash": "1ac6b230a66640acdebf8424cd48ae534087431b7c7afd49b560f7be8d48e299"
+      "close": 138.0,
+      "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "ticker": "8299",
-      "close": 2095.0,
-      "source_hash": "1ac6b230a66640acdebf8424cd48ae534087431b7c7afd49b560f7be8d48e299"
+      "close": 2085.0,
+      "source_hash": "e9c5a86950f88ae2222126fa54af463e32d4f0f8d5d1d5ac64a328fa03932bee"
     }
   ],
-  "notes": "C6固定score0排名與三槽官方收盤估值更新至2026-09-07；公司行動完整權威清冊仍待確認。",
+  "notes": "C6固定score0排名與三槽官方收盤估值更新至2026-09-08；公司行動完整權威清冊仍待確認。",
   "coverage": {
-    "ranking_snapshot_as_of": "2026-09-07",
-    "accounting_snapshot_as_of": "2026-09-07",
-    "ranking_rows": 62,
-    "ledger_rows": 66,
+    "ranking_snapshot_as_of": "2026-09-08",
+    "accounting_snapshot_as_of": "2026-09-08",
+    "ranking_rows": 64,
+    "ledger_rows": 69,
     "future_data_violation_count": 0
   },
   "formal_model_changed": false,
@@ -11631,6 +12008,6 @@
   "active_in_trade_decision": true,
   "report_changed": true,
   "not_live_rule": true,
-  "ranking_snapshot_as_of": "2026-09-07",
-  "accounting_snapshot_as_of": "2026-09-07"
+  "ranking_snapshot_as_of": "2026-09-08",
+  "accounting_snapshot_as_of": "2026-09-08"
 }

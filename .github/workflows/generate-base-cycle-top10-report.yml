@@ -1,8 +1,11 @@
 name: Update V4-D Top1 Dashboard
 
 on:
-  schedule:
-    - cron: "0 7 * * 1-5"
+  workflow_call:
+    inputs:
+      report_date:
+        required: true
+        type: string
   workflow_dispatch:
     inputs:
       report_date:
@@ -41,7 +44,7 @@ jobs:
           SCHEDULE_RULES_PATH: ${{ github.workspace }}/AI_stock_schedule_rules/schedule_rules.json
         run: |
           set -euo pipefail
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          if [ -n "${{ inputs.report_date }}" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             report_date="${{ inputs.report_date }}"
             if [ -z "${report_date}" ]; then
               python -m rotation_radar.schedule_gate --recover-delayed-schedule
@@ -119,7 +122,7 @@ jobs:
             if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
               echo "::notice::正式V4-D資料尚未完整；本次不更新Dashboard。"
             fi
-            exit 0
+            exit 75
           fi
           if [ "$status" -ne 0 ]; then exit "$status"; fi
           echo "signal_ready=true" >> "$GITHUB_OUTPUT"
@@ -144,7 +147,7 @@ jobs:
             if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
               echo "::notice::V4-D資料尚未完整；本次不更新Dashboard。"
             fi
-            exit 0
+            exit 75
           fi
           if [ "$status" -ne 0 ]; then exit "$status"; fi
           echo "report_ready=true" >> "$GITHUB_OUTPUT"

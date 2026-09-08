@@ -39,6 +39,7 @@ class ScheduleGateRules:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Determine the Taiwan trading date whose report still needs publishing.")
     parser.add_argument("--now", help="Optional Asia/Taipei timestamp for validation, e.g. 2026-06-04T15:00:00.")
+    parser.add_argument("--run-after", help="Explicit task-specific cutoff; shared PDF schedule is unchanged.")
     parser.add_argument(
         "--rules",
         type=Path,
@@ -54,6 +55,8 @@ def main() -> None:
 
     now = _parse_now(args.now)
     rules = load_schedule_rules(args.rules)
+    if args.run_after:
+        rules = ScheduleGateRules(run_after=_parse_hhmm(args.run_after), retry_until_success=rules.retry_until_success)
     if args.recover_delayed_schedule and now.time() < rules.run_after:
         rules = ScheduleGateRules(run_after=rules.run_after, retry_until_success=True)
     open_dates, closed_dates = fetch_twse_calendar()

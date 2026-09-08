@@ -1,0 +1,72 @@
+name: Publish all stock Dashboards
+
+on:
+  schedule:
+    - cron: "15 9 * * 1-5"
+  workflow_dispatch:
+
+concurrency:
+  group: all-stock-dashboards
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  target:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.date.outputs.should_run }}
+      target_date: ${{ steps.date.outputs.target_date }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: ryan-AI-stock/AI_stock_schedule_rules
+          ref: main
+          path: AI_stock_schedule_rules
+      - name: Resolve one completed Taiwan session for every Dashboard
+        id: date
+        env:
+          SCHEDULE_RULES_PATH: ${{ github.workspace }}/AI_stock_schedule_rules/schedule_rules.json
+        run: python -m rotation_radar.schedule_gate --run-after 17:15 --recover-delayed-schedule
+      - name: Reject unavailable calendar instead of successful no-op
+        if: steps.date.outputs.reason == 'calendar_unavailable'
+        run: exit 1
+
+  v4d:
+    needs: target
+    if: needs.target.outputs.should_run == 'true'
+    uses: ./.github/workflows/generate-base-cycle-top10-report.yml
+    with:
+      report_date: ${{ needs.target.outputs.target_date }}
+    secrets: inherit
+
+  c6:
+    needs: target
+    if: needs.target.outputs.should_run == 'true'
+    uses: ./.github/workflows/publish-c6-research-dashboard.yml
+    with:
+      report_date: ${{ needs.target.outputs.target_date }}
+    secrets: inherit
+
+  complete:
+    if: always()
+    needs: [target, v4d, c6]
+    runs-on: ubuntu-latest
+    steps:
+      - name: All publications and readbacks must succeed
+        env:
+          TARGET_RESULT: ${{ needs.target.result }}
+          SHOULD_RUN: ${{ needs.target.outputs.should_run }}
+          V4D_RESULT: ${{ needs.v4d.result }}
+          C6_RESULT: ${{ needs.c6.result }}
+        run: |
+          test "$TARGET_RESULT" = success
+          if [ "$SHOULD_RUN" != true ]; then
+            echo "No eligible completed trading session." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          test "$V4D_RESULT" = success
+          test "$C6_RESULT" = success
+          echo "V4-D and both C6 Dashboards finished publication and readback." >> "$GITHUB_STEP_SUMMARY"

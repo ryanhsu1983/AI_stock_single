@@ -1,8 +1,11 @@
 name: Publish C6 Research Dashboard
 
 on:
-  schedule:
-    - cron: "15 9 * * 1-5"
+  workflow_call:
+    inputs:
+      report_date:
+        required: true
+        type: string
   workflow_dispatch:
     inputs:
       report_date:
@@ -38,7 +41,7 @@ jobs:
           SCHEDULE_RULES_PATH: ${{ github.workspace }}/AI_stock_schedule_rules/schedule_rules.json
         run: |
           set -euo pipefail
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          if [ -n "${{ inputs.report_date }}" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             report_date="${{ inputs.report_date }}"
             if [ -z "${report_date}" ]; then
               python -m rotation_radar.schedule_gate --recover-delayed-schedule

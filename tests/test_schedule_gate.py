@@ -170,14 +170,14 @@ class ScheduleGateTests(unittest.TestCase):
             workflow,
         )
 
-    def test_manual_v4d_report_defers_incomplete_data_without_failing_batch(self) -> None:
+    def test_manual_v4d_report_exposes_incomplete_data_to_batch(self) -> None:
         workflow = Path(
             ".github/workflows/generate-base-cycle-top10-report.yml"
         ).read_text(encoding="utf-8")
 
         self.assertIn('if [ "${{ github.event_name }}" = "workflow_dispatch" ]', workflow)
         self.assertIn("::notice::", workflow)
-        self.assertNotIn("exit 75", workflow)
+        self.assertIn("exit 75", workflow)
         self.assertIn("--recover-delayed-schedule", workflow)
 
     def test_delayed_schedule_can_recover_previous_trading_day(self) -> None:
@@ -204,11 +204,11 @@ class ScheduleGateTests(unittest.TestCase):
                 workflow,
             )
 
-    def test_manual_v4d_data_not_ready_is_a_clean_defer(self) -> None:
+    def test_v4d_data_not_ready_cannot_report_batch_success(self) -> None:
         workflow = Path(
             ".github/workflows/generate-base-cycle-top10-report.yml"
         ).read_text(encoding="utf-8")
-        self.assertNotIn("exit 75", workflow)
+        self.assertEqual(workflow.count("exit 75"), 2)
 
 
 @contextmanager

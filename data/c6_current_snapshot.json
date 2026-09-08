@@ -11322,6 +11322,10 @@
         "source_hash": "1ac6b230a66640acdebf8424cd48ae534087431b7c7afd49b560f7be8d48e299"
       }
     ],
+    "calendar_loaded": true,
+    "missing_session_dates": [
+      "2026-07-10"
+    ],
     "event_basis_ready": false
   },
   "market_rows": [

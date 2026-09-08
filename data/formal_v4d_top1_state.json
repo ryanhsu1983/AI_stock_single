@@ -1,16 +1,16 @@
 {
   "version": 2,
   "model": "V4-D",
-  "ticker": "2609",
-  "name": "陽明",
+  "ticker": "2383",
+  "name": "台光電",
   "market": "TWSE",
-  "signal_date": "2026-09-07",
-  "signal_close": 58.1,
-  "execution_date": "2026-09-08",
+  "signal_date": "2026-09-08",
+  "signal_close": 5340.0,
+  "execution_date": "2026-09-09",
   "entry_close": null,
   "status": "signal_only",
   "daily_marks": {},
   "candidate_rank": 1,
-  "industry": "航運業",
+  "industry": "電子零組件業",
   "layer1_snapshot_date": "20260728"
 }

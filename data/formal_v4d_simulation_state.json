@@ -90,10 +90,23 @@
     "shares": 330387,
     "buy_fee": 12196.0709115,
     "position_cost": 6586897.3709115,
-    "status": "holding",
-    "pending_exit": null,
+    "status": "pending_sell",
+    "pending_exit": {
+      "decision_date": "2026-09-08",
+      "execution_date": "2026-09-09",
+      "reason": "TD14 after-cost 未達+5%",
+      "replacement": {
+        "ticker": "2383",
+        "name": "台光電",
+        "market": "TWSE",
+        "signal_date": "2026-09-08",
+        "signal_close": 5340.0,
+        "execution_date": "2026-09-09",
+        "blocked": false
+      }
+    },
     "simulation_position": true,
-    "last_report_date": "2026-09-07",
+    "last_report_date": "2026-09-08",
     "daily_marks": {
       "2026-08-19": {
         "close": 19.9,
@@ -237,6 +250,17 @@
         "peak_after_cost_return_pct": 3.8225649209661094,
         "trailing_drawdown_pct": -1.682692307692335,
         "rolling_5td_return_pct": 0.49140049140048436
+      },
+      "2026-09-08": {
+        "close": 20.6,
+        "daily_return_pct": 0.7334963325183574,
+        "d_index": 13,
+        "model_td": 14,
+        "cumulative_return_pct": 3.5175879396984966,
+        "after_cost_return_pct": 2.824271027495273,
+        "peak_after_cost_return_pct": 3.8225649209661094,
+        "trailing_drawdown_pct": -0.9615384615384692,
+        "rolling_5td_return_pct": 0.7334963325183574
       }
     }
   },

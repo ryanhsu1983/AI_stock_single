@@ -6,6 +6,24 @@ from rotation_radar import sheets_retry
 
 
 class ActualSignalsTests(unittest.TestCase):
+    def test_daily_rows_use_confirmed_entries_and_market_td(self):
+        tickers = ['2327', '2376', '3037', '6488']
+        rows = [[], []] + [[i, f'{t} 名稱｜10股', 100, 1000] for i, t in enumerate(tickers, 1)]
+        ledger = [['header']] + [['2026-09-03', i, '期初持倉登錄', t] + [''] * 13
+                                 + ['實際買入日2026-09-04；期初登錄'] for i, t in enumerate(tickers, 1)]
+        prices = [{'ticker': t, 'date': d, 'close': p, 'source_hash': 'a' * 64}
+                  for t in tickers for d, p in [('2026-09-04', 115), ('2026-09-07', 110)]]
+        payload = {'ranking_snapshot_as_of': '2026-09-07',
+                   'market_rows': [p for p in prices if p['date'] == '2026-09-07'],
+                   'actual_holding_history': {'end': '2026-09-07', 'calendar_complete': True,
+                       'trading_dates': ['2026-09-04', '2026-09-07'], 'official_rows': prices}}
+        observations = actual.daily_observation_rows(rows, payload, ledger)
+        self.assertEqual(observations[0][14], 2)
+        self.assertIn('最高原始收盤115元', observations[0][17])
+        self.assertIn('+20%後回撤12%待資料', observations[0][17])
+        payload['actual_holding_history']['end'] = '2026-09-08'
+        self.assertEqual(actual.daily_observation_rows(rows, payload, ledger)[0][14], '待完整交易日資料')
+
     def test_observations_are_not_fills_and_do_not_claim_exit_readiness(self):
         rows = [[], []] + [[i, f'{ticker} 名稱｜10股', 100, 1000]
                            for i, ticker in enumerate(['2327', '2376', '3037', '6488'], 1)]

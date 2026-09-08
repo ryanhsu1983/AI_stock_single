@@ -7,10 +7,21 @@ from unittest.mock import patch
 
 import pandas as pd
 
-from rotation_radar.c6_daily_pipeline import advance_account, rank_score0, load_official_0050
+from rotation_radar.c6_daily_pipeline import advance_account, rank_score0, load_official_0050, actual_history_payload
 
 
 class C6DailyPipelineTests(unittest.TestCase):
+    @patch('rotation_radar.c6_daily_pipeline.fetch_twse_calendar', return_value=(set(), {date(2026, 7, 2)}))
+    def test_actual_history_requires_complete_benchmark_sessions(self, calendar):
+        frame = pd.DataFrame([
+            {'date': pd.Timestamp('2026-07-01'), 'ticker': '0050', 'close': 100, 'source_hash': 'a' * 64},
+            {'date': pd.Timestamp('2026-07-01'), 'ticker': '2327', 'close': 500, 'source_hash': 'b' * 64},
+        ])
+        result = actual_history_payload(frame, pd.Timestamp('2026-07-02'))
+        self.assertTrue(result['calendar_complete'])
+        self.assertEqual(result['official_rows'][0]['source_hash'], 'b' * 64)
+        self.assertFalse(actual_history_payload(frame, pd.Timestamp('2026-07-03'))['calendar_complete'])
+
     @patch('rotation_radar.c6_daily_pipeline.urlopen')
     def test_current_month_cache_refreshes_for_new_session(self, fetch):
         with TemporaryDirectory() as folder:

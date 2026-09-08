@@ -13,17 +13,26 @@ from pathlib import Path
 
 from .c6_dashboard_publish import build_public_snapshot_values
 from .v4d_dashboard_publish import SheetsClient
-from .c6_actual_account import valid_source_hash
+from .c6_actual_account import valid_source_hash, holding_history_observation, evaluate_exit_observation
 
 SIGNALS = 'C6每日訊號資料庫'
 DASHBOARD = 'C6 Dashboard'
 ACTUAL_TRADES = 'C6實際交易紀錄'
 
 
-def daily_observation_rows(account_rows: list, payload: dict) -> list:
+def daily_observation_rows(account_rows: list, payload: dict, actual_ledger: list | None = None) -> list:
     """Value the currently reported units, without inferring any execution."""
     target = payload['ranking_snapshot_as_of']
     records = payload.get('market_rows', [])
+    entries = {}
+    for event in (actual_ledger or [])[1:]:
+        if len(event) >= 18 and event[2] == '期初持倉登錄':
+            match = re.search(r'實際買入日(\d{4}-\d{2}-\d{2})', str(event[17]))
+            if match:
+                key = str(event[3])
+                if key in entries and entries[key] != match[1]:
+                    raise ValueError('Conflicting actual entry dates')
+                entries[key] = match[1]
     result = []
     for row in account_rows[2:6]:
         label = str(row[1])
@@ -41,10 +50,31 @@ def daily_observation_rows(account_rows: list, payload: dict) -> list:
         if isinstance(close, bool) or not isinstance(close, (int, float)) or not math.isfinite(close) or close <= 0:
             raise ValueError(f'Invalid actual mark: {ticker}')
         pnl = round(units * (close - cost), 2)
+        history = payload.get('actual_holding_history', {})
+        entry = entries.get(ticker)
+        tracking = holding_history_observation(
+            ticker=ticker, entry_date=entry, as_of=target,
+            official_rows=history.get('official_rows', []), trading_dates=history.get('trading_dates', []),
+            calendar_complete=history.get('calendar_complete') is True and history.get('end') == target,
+        ) if entry else {}
+        td = tracking.get('holding_td')
+        high = tracking.get('raw_close_high')
+        details = f'實際買入日{entry}；' if entry else '買入日待確認；'
+        details += f'已持有{td} TD；' if td else '交易日資料待補；'
+        details += f'持有期間最高原始收盤{high:g}元（未調整公司行動）；' if high else '持有高點資料待補；'
+        if td:
+            checks = evaluate_exit_observation(current_return=close / cost - 1, holding_td=td,
+                                               peak_return=None, macro_triple=None)
+            labels = {'hard_loss_guard': '成本虧損12%', 'activated_peak_drawdown': '+20%後回撤12%',
+                      'first_growth_review_failed': 'TD35未轉正', 'second_growth_review_failed': 'TD50未達8%',
+                      'maximum_holding_td': 'TD60退出', 'macro_triple': '獲利15%與宏觀三條件'}
+            details += '成本參考條件：' + '；'.join(
+                labels[key] + ('已達門檻' if state is True else '未達門檻' if state is False else '待資料')
+                for key, state in checks['conditions'].items()) + '；'
         result.append([target, row[0], '每日估值（非成交）', ticker, name,
                        '持倉追蹤', close, units, round(units * close, 2), '', '', '', '', '',
-                       '待完整追蹤', '', close / cost - 1,
-                       f'依目前回報股數估值；帳面未實現損益{pnl:,.2f}元（成本含買進費用，未扣未發生賣出成本，不含股利）；完整退出條件待接通，非續抱或賣出指令。'])
+                       td if td else '待完整交易日資料', '', close / cost - 1,
+                       details + f'帳面未實現損益{pnl:,.2f}元（成本含買進費用，未扣未發生賣出成本，不含股利）；完整退出條件待接通，非續抱或賣出指令。'])
     return result
 
 
@@ -94,7 +124,7 @@ def publish(spreadsheet_id: str, payload: dict) -> dict:
     before = client.get(f"'{DASHBOARD}'!A10:D31")
     if not before:
         raise ValueError('Actual account holdings scaffold is missing')
-    observations = daily_observation_rows(before, payload)
+    observations = daily_observation_rows(before, payload, actual_ledger)
     # Upsert only our own same-day observation rows; preserve every real event.
     observation_writes = []
     next_row = len(actual_ledger) + 1

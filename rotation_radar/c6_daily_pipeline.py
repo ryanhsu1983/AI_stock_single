@@ -25,6 +25,7 @@ from .formal_sources.point_in_time_revenue import (
     parse_mops_revenue_html,
 )
 from .v4d_dashboard_publish import SheetsClient
+from .schedule_gate import fetch_twse_calendar, is_trading_day
 from .v4d_top1_signal import (
     LAYER1_SNAPSHOT,
     LIQUIDITY_WARMUP,
@@ -450,6 +451,25 @@ def _third_wednesday(target: pd.Timestamp) -> pd.Timestamp:
     return first + pd.offsets.WeekOfMonth(week=2, weekday=2)
 
 
+def actual_history_payload(official: pd.DataFrame, target: pd.Timestamp) -> dict:
+    """Reuse downloaded raw history; do not infer actual fills or event coverage."""
+    start = pd.Timestamp('2026-07-01')
+    open_dates, closed_dates = fetch_twse_calendar()
+    sessions = [] if closed_dates is None else [
+        day.date().isoformat() for day in pd.date_range(start, target)
+        if is_trading_day(day.date(), open_dates, closed_dates)]
+    benchmark_dates = set(official.loc[official.ticker.eq('0050'), 'date'].dt.strftime('%Y-%m-%d'))
+    complete = bool(sessions) and set(sessions).issubset(benchmark_dates)
+    rows = [
+        {'ticker': str(row.ticker), 'date': row.date.date().isoformat(),
+         'close': float(row.close), 'source_hash': str(getattr(row, 'source_hash', ''))}
+        for row in official.loc[official.date.between(start, target) & official.ticker.isin(POOL)]
+        .itertuples(index=False) if pd.notna(row.close)]
+    return {'start': start.date().isoformat(), 'end': target.date().isoformat(),
+            'calendar_complete': complete, 'trading_dates': sessions, 'official_rows': rows,
+            'event_basis_ready': False}
+
+
 def build_daily_payload(*, target: pd.Timestamp, source_repo: Path, source_cache: Path, prior_payload: Path, output: Path, offline: bool = False) -> dict:
     prior = json.loads(prior_payload.read_text(encoding="utf-8"))
     official, turnover = load_official_prices_and_turnover(
@@ -545,6 +565,7 @@ def build_daily_payload(*, target: pd.Timestamp, source_repo: Path, source_cache
         "data_status": "partial_whole_share_replay_event_coverage_pending", "source_manifest_hash": source_hash,
         "snapshot_rows": snapshot_rows, "ledger_rows": ledger, "slots": slots, "cash": cash,
         "pending_orders": pending,
+        "actual_holding_history": actual_history_payload(official, target),
         "market_rows": [
             {"date": target.date().isoformat(), "ticker": str(row.ticker),
              "close": float(row.close), "source_hash": str(getattr(row, "source_hash", ""))}

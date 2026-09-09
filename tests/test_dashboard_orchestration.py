@@ -37,6 +37,8 @@ class DashboardOrchestrationTests(unittest.TestCase):
         self.assertIn('uses: ./.github/workflows/publish-all-stock-dashboards.yml', wrapper)
         self.assertNotIn('run:', wrapper)
         self.assertIn('workflow_call:', parent)
+        self.assertIn('for attempt in 1 2 3', parent)
+        self.assertIn('no publication allowed', parent)
         self.assertNotIn('uses: ./.github/workflows/generate-base-cycle-top10-report.yml', parent)
 
 if __name__ == '__main__':

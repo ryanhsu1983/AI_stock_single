@@ -40,7 +40,19 @@ jobs:
         id: date
         env:
           SCHEDULE_RULES_PATH: ${{ github.workspace }}/AI_stock_schedule_rules/schedule_rules.json
-        run: python -m rotation_radar.schedule_gate --run-after 17:15 --recover-delayed-schedule
+        run: |
+          for attempt in 1 2 3; do
+            gate_output=$(mktemp)
+            GITHUB_OUTPUT="$gate_output" python -m rotation_radar.schedule_gate --run-after 17:15 --recover-delayed-schedule
+            if ! grep -q '^reason=calendar_unavailable$' "$gate_output"; then
+              cat "$gate_output" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            echo "Official calendar unavailable, attempt $attempt/3"
+            if [ "$attempt" -lt 3 ]; then sleep 5; fi
+          done
+          echo "::error::Official calendar unavailable after three attempts; no publication allowed"
+          exit 1
       - name: Reject unavailable calendar instead of successful no-op
         if: steps.date.outputs.reason == 'calendar_unavailable'
         run: exit 1

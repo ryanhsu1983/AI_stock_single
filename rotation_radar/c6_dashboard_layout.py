@@ -64,7 +64,7 @@ def format_requests(sheet_id):
         {'unmergeCells': {'range': region(0, 60)}},
         {'repeatCell': {'range': region(0, 60), 'cell': {'userEnteredFormat': {
             'backgroundColor': {'red': 1, 'green': 1, 'blue': 1}, 'textFormat': {'fontFamily': 'Arial', 'fontSize': 11},
-            'verticalAlignment': 'CENTER', 'wrapStrategy': 'WRAP', 'numberFormat': {'type': 'NUMBER', 'pattern': '#,##0.00;[Red]-#,##0.00'}}}, 'fields': 'userEnteredFormat'}},
+            'verticalAlignment': 'MIDDLE', 'wrapStrategy': 'WRAP', 'numberFormat': {'type': 'NUMBER', 'pattern': '#,##0.00;[Red]-#,##0.00'}}}, 'fields': 'userEnteredFormat'}},
         {'updateDimensionProperties': {'range': {'sheetId': sheet_id, 'dimension': 'ROWS', 'startIndex': 0, 'endIndex': 60}, 'properties': {'pixelSize': 38}, 'fields': 'pixelSize'}},
         {'updateSheetProperties': {'properties': {'sheetId': sheet_id, 'gridProperties': {'hideGridlines': True, 'frozenRowCount': 2}}, 'fields': 'gridProperties.hideGridlines,gridProperties.frozenRowCount'}},
     ]

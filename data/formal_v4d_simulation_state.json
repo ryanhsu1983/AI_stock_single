@@ -2,7 +2,7 @@
   "schema_version": 1,
   "account_type": "formal_v4d_forward_simulation",
   "initial_capital": 7000000.0,
-  "cash": 11.282468500547111,
+  "cash": 3179.701770249754,
   "transactions": [
     {
       "trade_date": "2026-08-05",
@@ -78,39 +78,72 @@
       "signal_date": "2026-08-18",
       "signal_close": 20.1,
       "reason": "技嘉退出後依2026-08-18收盤Top1換倉"
+    },
+    {
+      "trade_date": "2026-09-09",
+      "action": "sell",
+      "ticker": "2610",
+      "name": "華航",
+      "execution_price": 20.45,
+      "shares": 330387,
+      "gross_amount": 6756414.149999999,
+      "transaction_cost": 32802.39069825,
+      "net_cash_flow": 6723611.759301749,
+      "cash_after": 6723623.04177025,
+      "realized_pnl": 136714.38839024864,
+      "realized_return_pct": 2.075550607392111,
+      "reason": "TD14 after-cost 未達+5%"
+    },
+    {
+      "trade_date": "2026-09-09",
+      "action": "buy",
+      "ticker": "2383",
+      "name": "台光電",
+      "execution_price": 5375.0,
+      "shares": 1248,
+      "gross_amount": 6708000.0,
+      "transaction_cost": 12443.339999999998,
+      "net_cash_flow": -6720443.34,
+      "cash_after": 3179.701770249754,
+      "signal_date": "2026-09-08",
+      "signal_close": 5340.0,
+      "reason": "前一持股退出後依前一交易日Top1換倉"
+    },
+    {
+      "trade_date": "2026-09-09",
+      "scheduled_withdrawal_date": "2026-09-09",
+      "withdrawal_deferred_from_closed_date": false,
+      "target_withdrawal_amount": 75000.0,
+      "action": "monthly_withdrawal_stock_sale",
+      "ticker": "2383",
+      "name": "台光電",
+      "execution_price": 5375.0,
+      "shares": 14,
+      "gross_amount": 75250.0,
+      "transaction_cost": 365.33875,
+      "net_cash_flow": 0.0,
+      "withdrawal_amount": 74884.66125,
+      "realized_pnl": -504.9274999999907,
+      "realized_return_pct": -0.669757599652632,
+      "cash_after": 3179.701770249754,
+      "reason": "每月提領：第二個星期三，整股賣出後提領淨額"
     }
   ],
   "position": {
-    "ticker": "2610",
-    "name": "華航",
-    "signal_date": "2026-08-18",
-    "signal_close": 20.1,
-    "execution_date": "2026-08-19",
-    "entry_close": 19.9,
-    "shares": 330387,
-    "buy_fee": 12196.0709115,
-    "position_cost": 6586897.3709115,
-    "status": "pending_sell",
-    "pending_exit": {
-      "decision_date": "2026-09-08",
-      "execution_date": "2026-09-09",
-      "reason": "TD14 after-cost 未達+5%",
-      "replacement": {
-        "ticker": "2383",
-        "name": "台光電",
-        "market": "TWSE",
-        "signal_date": "2026-09-08",
-        "signal_close": 5340.0,
-        "execution_date": "2026-09-09",
-        "blocked": false
-      }
-    },
-    "simulation_position": true,
-    "last_report_date": "2026-09-08",
+    "ticker": "2383",
+    "name": "台光電",
+    "signal_date": "2026-09-08",
+    "signal_close": 5340.0,
+    "execution_date": "2026-09-09",
+    "entry_close": 5375.0,
+    "shares": 1234,
+    "buy_fee": 12303.75125,
+    "position_cost": 6645053.75125,
+    "status": "holding",
     "daily_marks": {
-      "2026-08-19": {
-        "close": 19.9,
-        "daily_return_pct": -0.9950248756219082,
+      "2026-09-09": {
+        "close": 5375.0,
+        "daily_return_pct": 0.655430711610494,
         "d_index": 0,
         "model_td": 1,
         "cumulative_return_pct": 0.0,
@@ -118,157 +151,19 @@
         "peak_after_cost_return_pct": -0.6697575996526428,
         "trailing_drawdown_pct": 0.0,
         "rolling_5td_return_pct": null
-      },
-      "2026-08-20": {
-        "close": 20.0,
-        "daily_return_pct": 0.5025125628140836,
-        "d_index": 1,
-        "model_td": 2,
-        "cumulative_return_pct": 0.5025125628140836,
-        "after_cost_return_pct": -0.17061065291722466,
-        "peak_after_cost_return_pct": -0.17061065291722466,
-        "trailing_drawdown_pct": 0.0,
-        "rolling_5td_return_pct": null
-      },
-      "2026-08-21": {
-        "close": 20.4,
-        "daily_return_pct": 2.0000000000000018,
-        "d_index": 2,
-        "model_td": 3,
-        "cumulative_return_pct": 2.5125628140703515,
-        "after_cost_return_pct": 1.8259771340244368,
-        "peak_after_cost_return_pct": 1.8259771340244368,
-        "trailing_drawdown_pct": 0.0,
-        "rolling_5td_return_pct": null
-      },
-      "2026-08-24": {
-        "close": 20.5,
-        "daily_return_pct": 0.4901960784313708,
-        "d_index": 3,
-        "model_td": 4,
-        "cumulative_return_pct": 3.015075376884435,
-        "after_cost_return_pct": 2.325124080759844,
-        "peak_after_cost_return_pct": 2.325124080759844,
-        "trailing_drawdown_pct": 0.0,
-        "rolling_5td_return_pct": null
-      },
-      "2026-08-25": {
-        "close": 20.4,
-        "daily_return_pct": -0.487804878048792,
-        "d_index": 4,
-        "model_td": 5,
-        "cumulative_return_pct": 2.5125628140703515,
-        "after_cost_return_pct": 1.8259771340244368,
-        "peak_after_cost_return_pct": 2.325124080759844,
-        "trailing_drawdown_pct": -0.4878048780487698,
-        "rolling_5td_return_pct": 2.5125628140703515
-      },
-      "2026-08-26": {
-        "close": 20.8,
-        "daily_return_pct": 1.9607843137255054,
-        "d_index": 5,
-        "model_td": 6,
-        "cumulative_return_pct": 4.522613065326642,
-        "after_cost_return_pct": 3.8225649209661094,
-        "peak_after_cost_return_pct": 3.8225649209661094,
-        "trailing_drawdown_pct": 0.0,
-        "rolling_5td_return_pct": 4.0000000000000036
-      },
-      "2026-08-28": {
-        "close": 20.35,
-        "daily_return_pct": -2.1634615384615308,
-        "d_index": 6,
-        "model_td": 7,
-        "cumulative_return_pct": 2.261306532663321,
-        "after_cost_return_pct": 1.5764036606567222,
-        "peak_after_cost_return_pct": 3.8225649209661094,
-        "trailing_drawdown_pct": -2.163461538461564,
-        "rolling_5td_return_pct": -0.2450980392156743
-      },
-      "2026-08-31": {
-        "close": 20.25,
-        "daily_return_pct": -0.49140049140049546,
-        "d_index": 7,
-        "model_td": 8,
-        "cumulative_return_pct": 1.7587939698492594,
-        "after_cost_return_pct": 1.0772567139213152,
-        "peak_after_cost_return_pct": 3.8225649209661094,
-        "trailing_drawdown_pct": -2.644230769230782,
-        "rolling_5td_return_pct": -1.2195121951219523
-      },
-      "2026-09-01": {
-        "close": 20.35,
-        "daily_return_pct": 0.4938271604938427,
-        "d_index": 8,
-        "model_td": 9,
-        "cumulative_return_pct": 2.261306532663321,
-        "after_cost_return_pct": 1.5764036606567222,
-        "peak_after_cost_return_pct": 3.8225649209661094,
-        "trailing_drawdown_pct": -2.163461538461564,
-        "rolling_5td_return_pct": -0.2450980392156743
-      },
-      "2026-09-02": {
-        "close": 20.45,
-        "daily_return_pct": 0.49140049140048436,
-        "d_index": 9,
-        "model_td": 10,
-        "cumulative_return_pct": 2.7638190954773822,
-        "after_cost_return_pct": 2.0755506073921293,
-        "peak_after_cost_return_pct": 3.8225649209661094,
-        "trailing_drawdown_pct": -1.682692307692335,
-        "rolling_5td_return_pct": -1.6826923076923128
-      },
-      "2026-09-03": {
-        "close": 20.55,
-        "daily_return_pct": 0.4889975550122383,
-        "d_index": 10,
-        "model_td": 11,
-        "cumulative_return_pct": 3.266331658291466,
-        "after_cost_return_pct": 2.5746975541275585,
-        "peak_after_cost_return_pct": 3.8225649209661094,
-        "trailing_drawdown_pct": -1.2019230769230949,
-        "rolling_5td_return_pct": 0.9828009828009687
-      },
-      "2026-09-04": {
-        "close": 20.45,
-        "daily_return_pct": -0.48661800486619056,
-        "d_index": 11,
-        "model_td": 12,
-        "cumulative_return_pct": 2.7638190954773822,
-        "after_cost_return_pct": 2.0755506073921293,
-        "peak_after_cost_return_pct": 3.8225649209661094,
-        "trailing_drawdown_pct": -1.682692307692335,
-        "rolling_5td_return_pct": 0.9876543209876409
-      },
-      "2026-09-07": {
-        "close": 20.45,
-        "daily_return_pct": 0.0,
-        "d_index": 12,
-        "model_td": 13,
-        "cumulative_return_pct": 2.7638190954773822,
-        "after_cost_return_pct": 2.0755506073921293,
-        "peak_after_cost_return_pct": 3.8225649209661094,
-        "trailing_drawdown_pct": -1.682692307692335,
-        "rolling_5td_return_pct": 0.49140049140048436
-      },
-      "2026-09-08": {
-        "close": 20.6,
-        "daily_return_pct": 0.7334963325183574,
-        "d_index": 13,
-        "model_td": 14,
-        "cumulative_return_pct": 3.5175879396984966,
-        "after_cost_return_pct": 2.824271027495273,
-        "peak_after_cost_return_pct": 3.8225649209661094,
-        "trailing_drawdown_pct": -0.9615384615384692,
-        "rolling_5td_return_pct": 0.7334963325183574
       }
-    }
+    },
+    "pending_exit": null,
+    "simulation_position": true,
+    "last_report_date": "2026-09-09"
   },
   "pending_entry": null,
   "as_of_date": "2026-08-21",
   "withdrawal_schedule": {
     "amount": 75000.0,
     "start_date": "2026-09-09",
-    "processed_scheduled_dates": []
+    "processed_scheduled_dates": [
+      "2026-09-09"
+    ]
   }
 }

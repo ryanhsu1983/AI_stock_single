@@ -47,11 +47,16 @@ def build_actual_dashboard(account_rows, payload, actual_ledger):
         top.append([f'Top{rank}', f'{match[2]} {match[3]}' if match else '無其他合格股票', match[5] if match else '', '候選排名，非已成交' if match else ''])
     realized = sum(number(r[11]) for r in actual_ledger[1:] if len(r)>11 and r[11] not in ('', None) and r[2] != '每日估值（非成交）')
     withdrawals = sum(number(r[8]) for r in actual_ledger[1:] if len(r)>8 and r[2] == '已確認提領')
+    from .c6_dashboard_publish import _legacy_dashboard_values
+    benchmark_path = Path(__file__).resolve().parents[1] / 'data/c6_historical_64_benchmark.json'
+    benchmark = json.loads(benchmark_path.read_text(encoding='utf-8')) if benchmark_path.exists() else {}
+    historical = _legacy_dashboard_values(model_version='score0', snapshot_as_of=payload['ranking_snapshot_as_of'],
+        data_status='ready', slots=[], historical_benchmark=benchmark)[23:27]
     return layout(title='Ryan｜C6實際帳戶（含V4-D歷史成交）', date=payload['ranking_snapshot_as_of'],
         status='排名與官方收盤已接通；現金為最近回報餘額，完整退出及公司行動覆蓋仍待完成。',
         top_rows=top, holdings=holdings, cash=cash, realized=realized, withdrawals=withdrawals,
         model_logic='實際帳戶：8/5開始計算；9/3為原建檔日。京鼎為V4-D已結束交易，僅納入實際損益，不是C6績效。已有持股不重新均分；未成交不入帳。\n\n'+MODEL_LOGIC,
-        details=[['成交原則', '長期回歸三檔；可加碼或第五檔，由Ryan人工選擇並回報。'],
+        history=historical, details=[['成交原則', '長期回歸三檔；可加碼或第五檔，由Ryan人工選擇並回報。'],
                  ['現金確認', '9/7回報305,358元，已扣交割；預留75,000元，可用230,358元。尚無實際提領回報。'],
                  ['原持倉建檔日', '2026-09-03'], ['實際買入日期', '技嘉8/10；國巨、欣興9/1；環球晶9/2'],
                  ['持有高點／退出狀態', '逐檔完整資料見實際交易紀錄R欄；未知條件不標為未觸發。']])

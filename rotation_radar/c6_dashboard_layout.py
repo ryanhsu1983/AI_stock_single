@@ -75,11 +75,15 @@ def format_requests(sheet_id):
             {'mergeCells': {'range': region(row-1, row), 'mergeType': 'MERGE_ALL'}},
             {'repeatCell': {'range': region(row-1, row), 'cell': {'userEnteredFormat': {'backgroundColor': {'red': .08, 'green': .20, 'blue': .29}, 'textFormat': {'bold': True, 'fontSize': 12, 'foregroundColor': {'red': 1, 'green': 1, 'blue': 1}}}}, 'fields': 'userEnteredFormat(backgroundColor,textFormat)'}},
         ])
-    for row in (3, 9, 22, 23, 24, 25, 26, 27, 28, 29, 30):
+    for row in (3, 9, 22, 23, 24, 25, 26, 27, 28, 29, 30, 39, 40, 41, 42, 43):
         requests.append({'mergeCells': {'range': region(row-1, row, 1), 'mergeType': 'MERGE_ALL'}})
     for row in (5, 11, 18, 19, 20):
         requests.append({'repeatCell': {'range': region(row-1, row), 'cell': {'userEnteredFormat': {'backgroundColor': {'red': .91, 'green': .96, 'blue': .96}, 'textFormat': {'bold': True}}}, 'fields': 'userEnteredFormat(backgroundColor,textFormat.bold)'}})
     requests.extend([
+        {'repeatCell': {'range': region(11, 16, 0, 1), 'cell': {'userEnteredFormat': {'numberFormat': {'type': 'NUMBER', 'pattern': '0'}}}, 'fields': 'userEnteredFormat.numberFormat'}},
+        {'repeatCell': {'range': region(35, 37, 3, 4), 'cell': {'userEnteredFormat': {'numberFormat': {'type': 'PERCENT', 'pattern': '0.00%'}}}, 'fields': 'userEnteredFormat.numberFormat'}},
+        {'repeatCell': {'range': region(36, 37, 1, 2), 'cell': {'userEnteredFormat': {'numberFormat': {'type': 'PERCENT', 'pattern': '0.00%'}}}, 'fields': 'userEnteredFormat.numberFormat'}},
+        {'updateDimensionProperties': {'range': {'sheetId': sheet_id, 'dimension': 'ROWS', 'startIndex': 34, 'endIndex': 35}, 'properties': {'pixelSize': 110}, 'fields': 'pixelSize'}},
         {'mergeCells': {'range': region(31, 32), 'mergeType': 'MERGE_ALL'}},
         {'repeatCell': {'range': region(31, 32), 'cell': {'userEnteredFormat': {'verticalAlignment': 'TOP', 'horizontalAlignment': 'LEFT'}}, 'fields': 'userEnteredFormat(verticalAlignment,horizontalAlignment)'}},
         {'updateDimensionProperties': {'range': {'sheetId': sheet_id, 'dimension': 'ROWS', 'startIndex': 31, 'endIndex': 32}, 'properties': {'pixelSize': 1000}, 'fields': 'pixelSize'}},

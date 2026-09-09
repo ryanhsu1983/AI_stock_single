@@ -11,6 +11,24 @@ from rotation_radar.c6_daily_pipeline import advance_account, rank_score0, load_
 
 
 class C6DailyPipelineTests(unittest.TestCase):
+    @patch('rotation_radar.c6_daily_pipeline.next_trading_day', return_value=date(2026, 9, 10))
+    def test_withdrawal_sale_reduces_basis_without_false_loss(self, next_day):
+        day = pd.Timestamp('2026-09-09')
+        payload = {'slots':[{'slot_id':1,'ticker':'3653','shares':10000,'position_cost':1000000,'slot_cash':1000}],
+            'ledger_rows':[{'account_date':'2026-09-08','event_type':'buy','slot_id':1,'ticker':'3653'}]}
+        official = pd.DataFrame([{'date':day,'ticker':'3653','close':100}])
+        adjusted = pd.DataFrame([{'date':pd.Timestamp(d),'ticker':'3653','adjusted_analysis_close':100} for d in ('2026-09-08','2026-09-09')])
+        slots, ledger, cash, blockers, pending = advance_account(payload, day, pd.DataFrame(columns=['ticker']), official, adjusted)
+        self.assertEqual(blockers, [])
+        self.assertEqual(pending, [])
+        self.assertEqual(slots[0]['shares'], 9250)
+        self.assertEqual(slots[0]['position_cost'], 925000)
+        self.assertAlmostEqual(slots[0]['shares']*100/slots[0]['position_cost']-1, 0)
+        sale = next(r for r in ledger if r['event_type']=='withdrawal_sale')
+        self.assertEqual(sale['allocated_cost'],75000)
+        self.assertLess(sale['realized_pnl'],0)  # Only actual sale costs, not the withdrawal principal.
+        self.assertGreater(sale['realized_pnl'],-400)
+
     @patch('rotation_radar.c6_daily_pipeline.fetch_twse_calendar', return_value=(set(), {date(2026, 1, 1)}))
     @patch('rotation_radar.c6_daily_pipeline.urlopen')
     def test_incomplete_past_month_refreshes_but_complete_month_is_reused(self, fetch, calendar):

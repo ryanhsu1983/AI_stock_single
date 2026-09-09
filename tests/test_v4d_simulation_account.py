@@ -11,7 +11,7 @@ from rotation_radar.v4d_simulation_account import (
 class V4DSimulationAccountTests(unittest.TestCase):
     def test_daily_workflow_uses_simulation_state_only(self):
         workflow = Path(
-            ".github/workflows/generate-base-cycle-top10-report.yml"
+            ".github/workflows/v4d-dashboard-worker.yml"
         ).read_text(encoding="utf-8")
         self.assertIn("data/formal_v4d_simulation_state.json", workflow)
         self.assertNotIn("data/formal_v4d_actual_trade_state.json", workflow)

@@ -172,7 +172,7 @@ class ScheduleGateTests(unittest.TestCase):
 
     def test_manual_v4d_report_exposes_incomplete_data_to_batch(self) -> None:
         workflow = Path(
-            ".github/workflows/generate-base-cycle-top10-report.yml"
+            ".github/workflows/v4d-dashboard-worker.yml"
         ).read_text(encoding="utf-8")
 
         self.assertIn('if [ "${{ github.event_name }}" = "workflow_dispatch" ]', workflow)
@@ -196,7 +196,7 @@ class ScheduleGateTests(unittest.TestCase):
     def test_manual_workflows_recover_latest_completed_session_before_close(self) -> None:
         for workflow_path in (
             Path(".github/workflows/generate-report.yml"),
-            Path(".github/workflows/generate-base-cycle-top10-report.yml"),
+            Path(".github/workflows/v4d-dashboard-worker.yml"),
         ):
             workflow = workflow_path.read_text(encoding="utf-8")
             self.assertIn(
@@ -206,7 +206,7 @@ class ScheduleGateTests(unittest.TestCase):
 
     def test_v4d_data_not_ready_cannot_report_batch_success(self) -> None:
         workflow = Path(
-            ".github/workflows/generate-base-cycle-top10-report.yml"
+            ".github/workflows/v4d-dashboard-worker.yml"
         ).read_text(encoding="utf-8")
         self.assertEqual(workflow.count("exit 75"), 2)
 

@@ -4,6 +4,17 @@ on:
   schedule:
     - cron: "15 9 * * 1-5"
   workflow_dispatch:
+    inputs:
+      report_date:
+        required: false
+        type: string
+        default: ""
+  workflow_call:
+    inputs:
+      report_date:
+        required: false
+        type: string
+        default: ""
 
 concurrency:
   group: all-stock-dashboards
@@ -17,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       should_run: ${{ steps.date.outputs.should_run }}
-      target_date: ${{ steps.date.outputs.target_date }}
+      target_date: ${{ steps.request.outputs.target_date }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
@@ -33,11 +44,27 @@ jobs:
       - name: Reject unavailable calendar instead of successful no-op
         if: steps.date.outputs.reason == 'calendar_unavailable'
         run: exit 1
+      - name: Validate requested date against completed session
+        id: request
+        env:
+          REQUESTED_DATE: ${{ inputs.report_date }}
+          COMPLETED_DATE: ${{ steps.date.outputs.target_date }}
+        run: |
+          python - <<'PY'
+          import os
+          from datetime import date
+          latest = os.environ['COMPLETED_DATE']
+          requested = os.environ['REQUESTED_DATE'] or latest
+          if requested and (not latest or date.fromisoformat(requested) > date.fromisoformat(latest)):
+              raise SystemExit('Requested date is not completed; refusing future data')
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write(f'target_date={requested}\n')
+          PY
 
   v4d:
     needs: target
     if: needs.target.outputs.should_run == 'true'
-    uses: ./.github/workflows/generate-base-cycle-top10-report.yml
+    uses: ./.github/workflows/v4d-dashboard-worker.yml
     with:
       report_date: ${{ needs.target.outputs.target_date }}
     secrets: inherit

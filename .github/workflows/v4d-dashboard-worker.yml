@@ -1,0 +1,200 @@
+name: Update V4-D Top1 Dashboard
+
+on:
+  workflow_call:
+    inputs:
+      report_date:
+        required: true
+        type: string
+
+concurrency:
+  group: v4d-top1-dashboard
+  cancel-in-progress: false
+
+jobs:
+  generate-base-cycle-report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+      - name: Checkout Radar repository
+        uses: actions/checkout@v4
+
+      - name: Checkout shared schedule rules
+        uses: actions/checkout@v4
+        with:
+          repository: ryan-AI-stock/AI_stock_schedule_rules
+          ref: main
+          path: AI_stock_schedule_rules
+
+      - name: Determine target Taiwan trading date
+        id: report-date
+        shell: bash
+        env:
+          SCHEDULE_RULES_PATH: ${{ github.workspace }}/AI_stock_schedule_rules/schedule_rules.json
+        run: |
+          set -euo pipefail
+          if [ -n "${{ inputs.report_date }}" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            report_date="${{ inputs.report_date }}"
+            if [ -z "${report_date}" ]; then
+              python -m rotation_radar.schedule_gate --recover-delayed-schedule
+              exit 0
+            fi
+            {
+              echo "should_run=true"
+              echo "target_date=${report_date}"
+              echo "target_key=${report_date//-/}"
+              echo "reason=manual_workflow_dispatch"
+            } >> "$GITHUB_OUTPUT"
+          else
+            # GitHub scheduled jobs can be delayed for hours. If a post-close
+            # run starts after midnight Taiwan time, recover the prior trading
+            # date instead of reporting a successful no-op.
+            python -m rotation_radar.schedule_gate --recover-delayed-schedule
+          fi
+
+      - name: Stop when shared schedule gate rejects this run
+        if: steps.report-date.outputs.should_run != 'true'
+        run: echo "Schedule gate skipped; reason=${{ steps.report-date.outputs.reason }}"
+
+      - name: Restore publish marker
+        id: publish-marker
+        if: steps.report-date.outputs.should_run == 'true'
+        uses: actions/cache/restore@v4
+        with:
+          path: .github-run-state/v4d-dashboard-published
+          key: v4d-dashboard-published-${{ steps.report-date.outputs.target_key }}
+
+      - name: Set up Python
+        if: steps.report-date.outputs.should_run == 'true' && (github.event_name == 'workflow_dispatch' || steps.publish-marker.outputs.cache-hit != 'true')
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        if: steps.report-date.outputs.should_run == 'true' && (github.event_name == 'workflow_dispatch' || steps.publish-marker.outputs.cache-hit != 'true')
+        run: |
+          python -m pip install --upgrade pip
+          pip install '.[test]'
+
+      - name: Restore bounded source cache
+        if: steps.report-date.outputs.should_run == 'true' && (github.event_name == 'workflow_dispatch' || steps.publish-marker.outputs.cache-hit != 'true')
+        uses: actions/cache@v4
+        with:
+          path: data/current_base_cycle_source_cache
+          key: base-cycle-source-${{ github.ref_name }}-${{ github.run_id }}
+          restore-keys: |
+            base-cycle-source-${{ github.ref_name }}-
+
+      - name: Validate new report code
+        if: steps.report-date.outputs.should_run == 'true' && (github.event_name == 'workflow_dispatch' || steps.publish-marker.outputs.cache-hit != 'true')
+        run: |
+          python -m py_compile rotation_radar/v4d_top1_signal.py rotation_radar/disposition_gate.py rotation_radar/v4d_simulation_account.py rotation_radar/v4d_top1_daily_report.py rotation_radar/v4d_dashboard_publish.py rotation_radar/c6_dashboard_publish.py
+          python -m unittest tests.test_v4d_top1_signal tests.test_v4d_simulation_account tests.test_v4d_withdrawal_schedule tests.test_v4d_top1_daily_report tests.test_v4d_dashboard_publish tests.test_c6_dashboard_publish tests.test_schedule_gate -v
+
+      - name: Calculate current formal V4-D Top1
+        id: calculate-top1
+        if: steps.report-date.outputs.should_run == 'true' && (github.event_name == 'workflow_dispatch' || steps.publish-marker.outputs.cache-hit != 'true')
+        shell: bash
+        run: |
+          set +e
+          python -m rotation_radar.v4d_top1_signal \
+            --date "${{ steps.report-date.outputs.target_date }}" \
+            --source-repo . \
+            --source-cache data/current_base_cycle_source_cache \
+            --state data/formal_v4d_top1_state.json \
+            --ranking-output reports/formal_v4d_top30_daily.csv
+          status=$?
+          set -e
+          if [ "$status" -eq 75 ]; then
+            echo "signal_ready=false" >> "$GITHUB_OUTPUT"
+            echo "正式V4-D當日資料尚未完整，排程稍後自動重試。" >> "$GITHUB_STEP_SUMMARY"
+            if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+              echo "::notice::正式V4-D資料尚未完整；本次不更新Dashboard。"
+            fi
+            exit 75
+          fi
+          if [ "$status" -ne 0 ]; then exit "$status"; fi
+          echo "signal_ready=true" >> "$GITHUB_OUTPUT"
+      - name: Update current V4-D simulation state
+        id: build-report
+        if: steps.calculate-top1.outputs.signal_ready == 'true'
+        shell: bash
+        run: |
+          set +e
+          python -m rotation_radar.v4d_top1_daily_report \
+            --date "${{ steps.report-date.outputs.target_date }}" \
+            --source-repo . \
+            --state data/formal_v4d_top1_state.json \
+            --position-state data/formal_v4d_simulation_state.json \
+            --output reports/formal_v4d_top1_daily.html \
+            --tracking-output reports/formal_v4d_top1_daily.csv
+          status=$?
+          set -e
+          if [ "$status" -eq 75 ]; then
+            echo "report_ready=false" >> "$GITHUB_OUTPUT"
+            echo "資料尚未完整，排程稍後自動重試。" >> "$GITHUB_STEP_SUMMARY"
+            if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+              echo "::notice::V4-D資料尚未完整；本次不更新Dashboard。"
+            fi
+            exit 75
+          fi
+          if [ "$status" -ne 0 ]; then exit "$status"; fi
+          echo "report_ready=true" >> "$GITHUB_OUTPUT"
+
+      - name: Update V4-D Google Sheet Dashboard
+        if: steps.build-report.outputs.report_ready == 'true'
+        env:
+          GOOGLE_OAUTH_CLIENT_ID: ${{ secrets.GOOGLE_OAUTH_CLIENT_ID }}
+          GOOGLE_OAUTH_CLIENT_SECRET: ${{ secrets.GOOGLE_OAUTH_CLIENT_SECRET }}
+          GOOGLE_OAUTH_REFRESH_TOKEN: ${{ secrets.GOOGLE_OAUTH_REFRESH_TOKEN }}
+        run: |
+          python -m rotation_radar.v4d_dashboard_publish \
+            --spreadsheet-id 1CXwlB2ywUxOzLH5aAqymJSJJq-V5jTl_zOJAuuGk5Uk \
+            --ranking reports/formal_v4d_top30_daily.csv \
+            --state data/formal_v4d_top1_state.json \
+            --simulation data/formal_v4d_simulation_state.json
+
+      - name: Commit durable V4-D Top1 history
+        if: steps.build-report.outputs.report_ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/formal_v4d_top1_state.json data/formal_v4d_simulation_state.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Update V4-D Top1 tracking state"
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+      - name: Upload report artifact
+        if: steps.build-report.outputs.report_ready == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: formal-v4d-top1-report
+          path: |
+            reports/formal_v4d_top1_daily.html
+            reports/formal_v4d_top1_daily.csv
+            reports/formal_v4d_top30_daily.csv
+            data/formal_v4d_top1_state.json
+            data/formal_v4d_simulation_state.json
+          if-no-files-found: error
+
+      - name: Create publish marker
+        if: success() && github.event_name == 'schedule' && steps.publish-marker.outputs.cache-hit != 'true' && steps.build-report.outputs.report_ready == 'true'
+        shell: bash
+        run: |
+          mkdir -p .github-run-state
+          printf '%s\n' "${{ steps.report-date.outputs.target_key }}" > .github-run-state/v4d-dashboard-published
+
+      - name: Save publish marker
+        if: success() && github.event_name == 'schedule' && steps.publish-marker.outputs.cache-hit != 'true' && steps.build-report.outputs.report_ready == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: .github-run-state/v4d-dashboard-published
+          key: v4d-dashboard-published-${{ steps.report-date.outputs.target_key }}

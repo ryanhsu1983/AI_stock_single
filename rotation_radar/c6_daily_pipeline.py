@@ -267,6 +267,16 @@ def advance_account(
     adjusted: pd.DataFrame,
 ) -> tuple[list[dict], list[dict], float, list[str], list[dict]]:
     target_text = target.date().isoformat()
+    # An accounting snapshot already includes all executions and withdrawals
+    # through its date. Re-publishing must not execute that session twice.
+    accounted = str(payload.get("accounting_snapshot_as_of", ""))
+    if accounted and target_text < accounted:
+        raise ReportDataNotReady("Cannot replay backwards from a later accounting snapshot")
+    if accounted == target_text:
+        import copy
+        return (copy.deepcopy(payload.get("slots", [])),
+                copy.deepcopy(payload.get("ledger_rows", [])), float(payload["cash"]), [],
+                copy.deepcopy(payload.get("pending_orders", [])))
     raw_today = official.loc[pd.to_datetime(official.date).eq(target)].copy()
     raw_map = {str(row.ticker): row for row in raw_today.itertuples(index=False)}
     adj_map = dict(zip(

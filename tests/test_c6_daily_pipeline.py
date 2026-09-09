@@ -28,6 +28,12 @@ class C6DailyPipelineTests(unittest.TestCase):
         self.assertEqual(sale['allocated_cost'],75000)
         self.assertLess(sale['realized_pnl'],0)  # Only actual sale costs, not the withdrawal principal.
         self.assertGreater(sale['realized_pnl'],-400)
+        replay = dict(payload, slots=slots, ledger_rows=ledger, cash=cash,
+                      pending_orders=pending, accounting_snapshot_as_of='2026-09-09')
+        repeated = advance_account(replay, day, pd.DataFrame(columns=['ticker']), official, adjusted)
+        self.assertEqual(repeated, (slots, ledger, cash, blockers, pending))
+        self.assertEqual(sum(r['event_type'] == 'withdrawal' for r in repeated[1]), 1)
+        self.assertEqual(repeated[0][0]['shares'], 9250)
 
     @patch('rotation_radar.c6_daily_pipeline.fetch_twse_calendar', return_value=(set(), {date(2026, 1, 1)}))
     @patch('rotation_radar.c6_daily_pipeline.urlopen')

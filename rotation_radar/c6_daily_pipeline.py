@@ -303,6 +303,8 @@ def advance_account(
                 "event_type": "sell", "ticker": ticker, "shares": shares, "raw_close": close,
                 "gross_amount": gross, "transaction_cost": cost, "net_amount": net, "cash_after": slot["cash"],
                 "relative_return_pct": net / float(slot["position_cost"]) - 1, "reason": order["reason"],
+                "realized_pnl": net - float(slot["position_cost"]),
+                "allocated_cost": float(slot["position_cost"]),
                 "signal_date": order.get("signal_date", ""),
             })
             slot.update({"ticker": "", "shares": 0, "position_cost": 0.0, "raw_close": 0.0})
@@ -413,7 +415,7 @@ def advance_account(
                     ),
                 )
                 close = float(raw_map[str(worst["ticker"])].close)
-                needed = WITHDRAWAL_AMOUNT - total_cash
+                needed = WITHDRAWAL_AMOUNT
                 candidates = {
                     max(1, min(int(worst["shares"]), int(round(needed / close)) + delta))
                     for delta in (-1, 0, 1)
@@ -422,15 +424,24 @@ def advance_account(
                 price = close * (1 - SLIPPAGE)
                 gross = shares * price
                 cost = gross * (COMMISSION + SELL_TAX)
+                from .c6_account_basis import allocate_sale_basis
+                allocated_cost, remaining_cost = allocate_sale_basis(
+                    float(worst["position_cost"]), int(worst["shares"]), shares,
+                )
                 worst["shares"] = int(worst["shares"]) - shares
+                worst["position_cost"] = remaining_cost
                 worst["cash"] += gross - cost
                 ledger.append({
                     "account_date": target_text, "event_sequence": 90, "slot_id": int(worst["slot_id"]),
                     "event_type": "withdrawal_sale", "ticker": str(worst["ticker"]), "shares": shares,
                     "raw_close": close, "gross_amount": gross, "transaction_cost": cost, "net_amount": gross - cost,
-                    "cash_after": worst["cash"], "relative_return_pct": "", "reason": "scheduled_withdrawal_funding",
+                    "cash_after": worst["cash"], "relative_return_pct": (gross - cost) / allocated_cost - 1,
+                    "allocated_cost": allocated_cost, "remaining_position_cost": remaining_cost,
+                    "realized_pnl": gross - cost - allocated_cost, "reason": "scheduled_withdrawal_funding",
                     "signal_date": target_text,
                 })
+                if not worst["shares"]:
+                    worst.update(ticker="", raw_close=0.0)
         remaining = WITHDRAWAL_AMOUNT
         for slot in sorted(slots, key=lambda item: int(item["slot_id"])):
             take = min(float(slot["cash"]), remaining)
@@ -575,6 +586,8 @@ def build_daily_payload(*, target: pd.Timestamp, source_repo: Path, source_cache
         "data_status": "partial_whole_share_replay_event_coverage_pending", "source_manifest_hash": source_hash,
         "snapshot_rows": snapshot_rows, "ledger_rows": ledger, "slots": slots, "cash": cash,
         "pending_orders": pending,
+        "initial_capital": prior.get("initial_capital", 7000000),
+        "capital_migration": prior.get("capital_migration", {}),
         "actual_holding_history": actual_history_payload(official, target),
         "market_rows": [
             {"date": target.date().isoformat(), "ticker": str(row.ticker),

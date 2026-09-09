@@ -47,7 +47,7 @@ class ActualSignalsTests(unittest.TestCase):
             actual.daily_observation_rows(rows, payload)
 
     def test_quotes_require_exact_date_price_and_lineage(self):
-        rows = [[], []] + [[1, f'{ticker} 名稱'] for ticker in ['2327', '2376', '3037', '6488']]
+        rows = [[], []] + [[1, f'{ticker} 名稱｜10股'] for ticker in ['2327', '2376', '3037', '6488']]
         value = actual.holding_quote_text(rows, {'ranking_snapshot_as_of': '2026-09-04', 'market_rows': [
             {'ticker': '2327', 'date': '2026-09-04', 'close': 100, 'source_hash': 'a' * 64},
             {'ticker': '2376', 'date': '2026-09-03', 'close': 101, 'source_hash': 'hash'},

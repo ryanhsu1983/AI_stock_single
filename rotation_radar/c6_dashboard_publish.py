@@ -20,7 +20,7 @@ from .v4d_simulation_account import SELL_RATE, second_wednesday
 DASHBOARD_SHEET = "C6 Dashboard"
 SNAPSHOT_SHEET = "C6每日訊號資料庫"
 LEDGER_SHEET = "C6模擬交易紀錄"
-C6_INITIAL_CAPITAL = 7_000_000.0
+from .c6_account_basis import INITIAL_CAPITAL as C6_INITIAL_CAPITAL
 C6_SLOT_COUNT = 3
 C6_WITHDRAWAL_AMOUNT = 75_000.0
 C6_FORWARD_START_DATE = "2026-08-05"
@@ -33,7 +33,7 @@ MODEL_LOGIC = """C6研究版｜AI硬體六大瓶頸與載體清冊 Bottom／Laun
 合格股票以綜合分數排序：Launch當日百分位40%＋Bottom當日百分位25%＋個股相對大盤20日強度百分位20%＋所屬供應鏈相對大盤20日強度百分位15%。同分時依Launch Score、族群相對強度及股票代號排序。每日列出Top1至Top3；分數是當日合格股票之間的相對排名，不代表預測報酬率。
 
 【買進】
-初始資金700萬元，平均分成三個獨立槽位。空槽存在時，收盤後從當日排名中選擇尚未持有的最高順位股票，下一交易日依正式成交口徑買進；同一股票不可重複占用兩槽。三槽全滿時不因每日Top1至Top3改變而換股。
+初始資金7,676,961.04元，平均分成三個獨立槽位。空槽存在時，收盤後從當日排名中選擇尚未持有的最高順位股票，下一交易日依正式成交口徑買進；同一股票不可重複占用兩槽。三槽全滿時不因每日Top1至Top3改變而換股；持續Top1不代表每天加碼。
 
 【賣出：收盤確認，下一交易日執行】
 1. 當下報酬跌至-12%以下，退出。
@@ -239,12 +239,13 @@ def build_trade_record_values(ledger_rows: list[dict], snapshot_rows: list[dict]
             td_by_slot[slot] = 0
             previous_mark[slot] = close
             action = "買進"
-        elif event == "sell":
+        elif event in {"sell", "withdrawal_sale"}:
             net = float(row.get("net_amount") or 0)
-            basis = position_cost.get(slot, 0)
+            basis = float(row.get("allocated_cost", position_cost.get(slot, 0)))
             realized_pnl = net - basis if basis else ""
             realized_return = realized_pnl / basis if basis else ""
-            action = "賣出"
+            position_cost[slot] = max(0, position_cost.get(slot, 0) - basis)
+            action = "提領賣股" if event == "withdrawal_sale" else "賣出"
         elif event == "withdrawal":
             action = "每月提領"
         else:
@@ -266,12 +267,14 @@ def build_trade_record_values(ledger_rows: list[dict], snapshot_rows: list[dict]
                 "macro_high_zone_exit": "高檔環境退出條件成立，下一交易日賣出",
                 "max_holding_exit": "達最長持有期限，下一交易日賣出",
             }.get(raw_reason, f"賣出條件成立：{raw_reason}" if raw_reason else "賣出條件成立")
+        elif event == "withdrawal_sale":
+            reason = "提領資金賣股；已按賣出股數比例扣除成本，提領不當作虧損"
         elif event == "withdrawal":
             reason = "每月第二個星期三依規則提領約75,000元"
         else:
             reason = raw_reason
         output.append([
-            date, slot, "成交" if event in {"buy", "sell"} else "每日持有", ticker, names.get(ticker, ""),
+            date, slot, "成交" if event in {"buy", "sell", "withdrawal_sale"} else "每日持有", ticker, names.get(ticker, ""),
             action, close, shares, gross, cost, row.get("cash_after", ""), realized_pnl, realized_return,
             signal_date, td_by_slot.get(slot, "") if event == "daily_mark" else "", daily_return,
             float(relative) if relative not in {None, ""} else "", reason,
@@ -304,10 +307,10 @@ def select_withdrawal_slot(
         marked = float(slot["raw_close"]) * int(slot["shares"])
         return (marked - float(slot["position_cost"])) / float(slot["position_cost"])
     selected = min(eligible, key=lambda slot: (relative_return(slot), str(slot.get("slot_id", ""))))
-    stock_target = max(0.0, target_amount - cash)
+    stock_target = target_amount
     shares = min(int(selected["shares"]), max(1, round(stock_target / float(selected["raw_close"]))))
     gross = shares * float(selected["raw_close"])
-    cost = gross * SELL_RATE
+    cost = gross * (1 - (1 - .001) * (1 - .000855 - .003))
     return {
         "status": "planned_stock_sale",
         "slot_id": selected.get("slot_id"),
@@ -337,7 +340,7 @@ def _next_withdrawal_dates(as_of: str, *, count: int = 2) -> list[str]:
     return dates
 
 
-def build_dashboard_values(
+def _legacy_dashboard_values(
     *, model_version: str, snapshot_as_of: str, data_status: str, slots: list[dict], cash: float = 0.0,
     notes: str = "", historical_benchmark: dict | None = None, snapshot_rows: list[dict] | None = None,
     ranking_snapshot_as_of: str | None = None, accounting_snapshot_as_of: str | None = None,
@@ -433,6 +436,20 @@ def build_dashboard_values(
     ]
 
 
+def build_dashboard_values(*, ledger_rows=None, **kwargs):
+    from .c6_dashboard_layout import layout
+    legacy = _legacy_dashboard_values(**kwargs)
+    names = {str(r.get('ticker')): r.get('name', '') for r in kwargs.get('snapshot_rows', [])}
+    holdings = [dict(s, name=s.get('name') or names.get(str(s.get('ticker')), '')) for s in kwargs['slots']]
+    realized = sum(float(r.get('realized_pnl') or 0) for r in (ledger_rows or []))
+    withdrawals = sum(float(r.get('gross_amount') or 0) for r in (ledger_rows or []) if r.get('event_type') == 'withdrawal')
+    return layout(title='C6研究版｜每日選股與模擬帳戶', date=kwargs.get('ranking_snapshot_as_of') or kwargs['snapshot_as_of'],
+        status=legacy[2][1], top_rows=legacy[5:8], holdings=holdings, cash=kwargs.get('cash', 0),
+        realized=realized, withdrawals=withdrawals, model_logic=MODEL_LOGIC,
+        history=legacy[23:27], details=[['正式帳本日期', kwargs.get('accounting_snapshot_as_of') or kwargs['snapshot_as_of']],
+            ['下次預定提領日', legacy[18][1]], ['目前預估', legacy[20][1]], ['目前限制', legacy[29][1]]])
+
+
 def publish_snapshot(
     spreadsheet_id: str,
     *,
@@ -476,11 +493,12 @@ def publish_snapshot(
     dashboard = build_dashboard_values(
         model_version=model_version, snapshot_as_of=snapshot_as_of, data_status=data_status, slots=slots, cash=cash,
         notes=notes, historical_benchmark=historical_benchmark, snapshot_rows=snapshot_rows,
-        ranking_snapshot_as_of=ranking_snapshot_as_of, accounting_snapshot_as_of=accounting_snapshot_as_of,
+        ranking_snapshot_as_of=ranking_snapshot_as_of, accounting_snapshot_as_of=accounting_snapshot_as_of, ledger_rows=ledger_rows,
     )
-    client.clear(f"'{DASHBOARD_SHEET}'!A1:D60")
+    from .c6_dashboard_layout import format_dashboard
+    format_dashboard(client)
+    client.clear(f"'{DASHBOARD_SHEET}'!A1:H60")
     client.update(f"'{DASHBOARD_SHEET}'!A1", dashboard)
-    client.format_model_logic(DASHBOARD_SHEET)
     from .c6_actual_dashboard_publish import signal_formulas
     for address, values in signal_formulas().items():
         client.update(address, values)

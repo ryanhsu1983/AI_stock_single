@@ -20,6 +20,43 @@ DASHBOARD = 'C6 Dashboard'
 ACTUAL_TRADES = 'C6實際交易紀錄'
 
 
+def reported_holdings(account_rows):
+    for row in account_rows[2:]:
+        if len(row) < 2 or not re.fullmatch(r'(\d{4})\s+(.+?)｜(\d+)股', str(row[1])):
+            break
+        yield row
+
+
+def number(value):
+    return float(str(value).replace('NT$', '').replace(',', ''))
+
+
+def build_actual_dashboard(account_rows, payload, actual_ledger):
+    from .c6_dashboard_layout import layout
+    from .c6_dashboard_publish import MODEL_LOGIC
+    observations = daily_observation_rows(account_rows, payload, actual_ledger)
+    source = list(reported_holdings(account_rows))
+    holdings = [dict(slot_id=r[1], ticker=r[3], name=r[4], shares=r[7], raw_close=r[6],
+                     position_cost=r[7]*number(s[2])) for r, s in zip(observations, source)]
+    upgraded = '預留五格' in str(account_rows[0][0])
+    cash = number(account_rows[8][1] if upgraded else account_rows[6][3])
+    ranked = [r for r in build_public_snapshot_values(payload['snapshot_rows'])[1:] if str(r[0]) == payload['ranking_snapshot_as_of']]
+    top = []
+    for rank in (1, 2, 3):
+        match = next((r for r in ranked if str(r[1]) == str(rank)), None)
+        top.append([f'Top{rank}', f'{match[2]} {match[3]}' if match else '無其他合格股票', match[5] if match else '', '候選排名，非已成交' if match else ''])
+    realized = sum(number(r[11]) for r in actual_ledger[1:] if len(r)>11 and r[11] not in ('', None) and r[2] != '每日估值（非成交）')
+    withdrawals = sum(number(r[8]) for r in actual_ledger[1:] if len(r)>8 and r[2] == '已確認提領')
+    return layout(title='Ryan｜C6實際帳戶（含V4-D歷史成交）', date=payload['ranking_snapshot_as_of'],
+        status='排名與官方收盤已接通；現金為最近回報餘額，完整退出及公司行動覆蓋仍待完成。',
+        top_rows=top, holdings=holdings, cash=cash, realized=realized, withdrawals=withdrawals,
+        model_logic='實際帳戶：8/5開始計算；9/3為原建檔日。京鼎為V4-D已結束交易，僅納入實際損益，不是C6績效。已有持股不重新均分；未成交不入帳。\n\n'+MODEL_LOGIC,
+        details=[['成交原則', '長期回歸三檔；可加碼或第五檔，由Ryan人工選擇並回報。'],
+                 ['現金確認', '9/7回報305,358元，已扣交割；預留75,000元，可用230,358元。尚無實際提領回報。'],
+                 ['原持倉建檔日', '2026-09-03'], ['實際買入日期', '技嘉8/10；國巨、欣興9/1；環球晶9/2'],
+                 ['持有高點／退出狀態', '逐檔完整資料見實際交易紀錄R欄；未知條件不標為未觸發。']])
+
+
 def daily_observation_rows(account_rows: list, payload: dict, actual_ledger: list | None = None) -> list:
     """Value the currently reported units, without inferring any execution."""
     target = payload['ranking_snapshot_as_of']
@@ -34,13 +71,13 @@ def daily_observation_rows(account_rows: list, payload: dict, actual_ledger: lis
                     raise ValueError('Conflicting actual entry dates')
                 entries[key] = match[1]
     result = []
-    for row in account_rows[2:6]:
+    for row in reported_holdings(account_rows):
         label = str(row[1])
         match = re.fullmatch(r'(\d{4})\s+(.+?)｜(\d+)股', label)
         if not match:
             raise ValueError('Actual holding layout changed; review required')
         ticker, name, units_text = match.groups()
-        units, cost = int(units_text), float(row[2])
+        units, cost = int(units_text), number(row[2])
         if units <= 0 or not math.isfinite(cost) or cost <= 0:
             raise ValueError('Invalid actual units or cost')
         quotes = [q for q in records if str(q.get('ticker')) == ticker and q.get('date') == target]
@@ -87,7 +124,7 @@ def holding_quote_text(account_rows: list, payload: dict) -> str:
     prices = {str(row['ticker']): row for row in payload.get('market_rows', [])
               if str(row.get('date')) == target}
     lines = []
-    for row in account_rows[2:6]:  # existing account A12:D15
+    for row in reported_holdings(account_rows):
         label = str(row[1]) if len(row) > 1 else ''
         match = re.match(r'^(\d{4})\s', label)
         if not match:
@@ -128,6 +165,8 @@ def publish(spreadsheet_id: str, payload: dict) -> dict:
     if not before:
         raise ValueError('Actual account holdings scaffold is missing')
     observations = daily_observation_rows(before, payload, actual_ledger)
+    if '預留五格' in str(before[0][0]):
+        return publish_upgraded(client, before, payload, actual_ledger, observations, rows)
     # Upsert only our own same-day observation rows; preserve every real event.
     observation_writes = []
     next_row = len(actual_ledger) + 1
@@ -180,6 +219,41 @@ def publish(spreadsheet_id: str, payload: dict) -> dict:
     return {'signal_date': expected_date, 'signal_readback_verified': True,
             'actual_trades_changed': False, 'daily_observation_rows': len(observations),
             'account_exit_tracking_ready': False}
+
+
+def publish_upgraded(client, before, payload, ledger, observations, rows):
+    from .c6_dashboard_layout import format_dashboard
+    dashboard = build_actual_dashboard(before, payload, ledger)
+    if client.get(f"'{ACTUAL_TRADES}'!A1:R1000") != ledger or client.get(f"'{DASHBOARD}'!A10:D31") != before:
+        raise RuntimeError('Actual account changed concurrently')
+    client.clear(f"'{SIGNALS}'!A1:I1000")
+    client.update(f"'{SIGNALS}'!A1", rows)
+    format_dashboard(client)
+    client.clear(f"'{DASHBOARD}'!A1:H60")
+    client.update(f"'{DASHBOARD}'!A1", dashboard)
+    for address, values in signal_formulas().items():
+        client.update(address, values)
+    if client.get(f"'{DASHBOARD}'!B2") != [[payload['ranking_snapshot_as_of']]]:
+        raise RuntimeError('Actual dashboard date mismatch')
+    for row_number, column in ((18, 'B'), (19, 'B'), (20, 'B')):
+        actual = client.get(f"'{DASHBOARD}'!{column}{row_number}")
+        if not actual or abs(number(actual[0][0])-dashboard[row_number-1][1]) > .01:
+            raise RuntimeError('Actual dashboard accounting readback mismatch')
+    next_row = len(ledger)+1
+    for observation in observations:
+        matches = [i+1 for i,r in enumerate(ledger) if len(r)>3 and r[0] == observation[0] and r[2] == observation[2] and str(r[3]) == observation[3]]
+        if len(matches)>1:
+            raise ValueError('Duplicate observation')
+        dest = matches[0] if matches else next_row
+        if not matches:
+            next_row += 1
+        address = f"'{ACTUAL_TRADES}'!A{dest}:R{dest}"
+        client.update(address, [observation])
+        verified = client.get(address)
+        if not verified or str(verified[0][3]) != observation[3] or number(verified[0][8]) != observation[8]:
+            raise RuntimeError('Actual observation readback mismatch')
+    return {'signal_date': payload['ranking_snapshot_as_of'], 'signal_readback_verified': True,
+            'actual_trades_changed': False, 'daily_observation_rows': len(observations), 'account_exit_tracking_ready': False}
 
 
 def main():

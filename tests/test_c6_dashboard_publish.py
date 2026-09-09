@@ -101,7 +101,7 @@ class C6DashboardPublishTests(unittest.TestCase):
             ],
         )
         top1 = next(row for row in rows if row[0] == "Top1")
-        self.assertEqual(top1, ["Top1", "2301 光寶科", 79.2, "已通過C6條件，當日排名第1"])
+        self.assertEqual(top1[:4], ["Top1", "2301 光寶科", 79.2, "已通過C6條件，當日排名第1"])
         values = self._pairs(rows)
         self.assertNotIn("data_status", values)
         flattened = "\n".join(str(cell) for row in rows for cell in row)
@@ -162,7 +162,7 @@ class C6DashboardPublishTests(unittest.TestCase):
             data_status="ready",
             slots=[],
         )
-        self.assertEqual(rows[31], [MODEL_LOGIC, "", "", ""])
+        self.assertEqual(rows[31], [MODEL_LOGIC] + [""] * 7)
         self.assertIn("C6是研究版，不取代正式V4-D", MODEL_LOGIC)
         self.assertIn("Bottom Score至少60分", MODEL_LOGIC)
         self.assertIn("Launch Score至少65分", MODEL_LOGIC)
@@ -174,7 +174,7 @@ class C6DashboardPublishTests(unittest.TestCase):
             model_version="c6-research-v1", snapshot_as_of="2026-08-12",
             data_status="ready", slots=[], cash=168.29,
         ))
-        self.assertEqual(values["帳戶現金"], "NT$168.29")
+        self.assertEqual(values["現金餘額"], 168.29)
 
     def test_dashboard_resolves_slot_name_from_signal_history(self):
         rows = build_dashboard_values(
@@ -182,7 +182,7 @@ class C6DashboardPublishTests(unittest.TestCase):
             slots=[{"slot_id": 1, "ticker": "3653", "shares": 531, "raw_close": 5615, "position_cost": 2_331_423}],
             snapshot_rows=[{"signal_date": "2026-08-06", "rank": 1, "ticker": "3653", "name": "健策", "score": 94.02}],
         )
-        slot = next(row for row in rows if row[0] == "第1槽")
+        slot = next(row for row in rows if row[0] == 1)
         self.assertEqual(slot[1], "3653 健策｜531股")
 
     def test_event_coverage_pending_is_plain_chinese(self):

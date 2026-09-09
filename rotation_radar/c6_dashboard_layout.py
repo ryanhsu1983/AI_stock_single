@@ -20,9 +20,12 @@ def layout(*, title, date, status, top_rows, holdings, cash, realized, withdrawa
     total_cost = total_mark = 0.0
     if len(holdings) > 5:
         raise ValueError('More than five actual positions require a layout extension')
+    by_slot = {int(float(h['slot_id'])): h for h in holdings}
+    if len(by_slot) != len(holdings) or any(i not in range(1, 6) for i in by_slot):
+        raise ValueError('Invalid or duplicate slot identifier')
     for i in range(5):
-        if i < len(holdings) and holdings[i].get('shares', 0):
-            h = holdings[i]
+        if by_slot.get(i+1, {}).get('shares', 0):
+            h = by_slot[i+1]
             units, basis, close = h['shares'], h['position_cost'], h['raw_close']
             mark = units * close
             total_cost += basis

@@ -33,6 +33,11 @@ class MigrationTests(unittest.TestCase):
         account[2][1]='2327 名稱｜5股'
         obs = daily_observation_rows(account,p,ledger)
         self.assertAlmostEqual(obs[0][16],.1)
+        account[3] = [2, '未持有／預留位置']
+        self.assertEqual(len(daily_observation_rows(account,p,ledger)),4)
+        rerender = build_actual_dashboard(account,p,ledger)
+        self.assertEqual(rerender[12][1], '未持有／預留位置')
+        self.assertIn('3037', rerender[13][1])
 
     def test_format_has_numeric_cash_and_percent_not_date(self):
         requests = format_requests(123)

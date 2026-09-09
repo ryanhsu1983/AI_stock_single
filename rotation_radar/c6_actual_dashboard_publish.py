@@ -21,10 +21,16 @@ ACTUAL_TRADES = 'C6實際交易紀錄'
 
 
 def reported_holdings(account_rows):
-    for row in account_rows[2:]:
-        if len(row) < 2 or not re.fullmatch(r'(\d{4})\s+(.+?)｜(\d+)股', str(row[1])):
+    for row in account_rows[2:7]:
+        label = str(row[1]) if len(row) > 1 else ''
+        if re.fullmatch(r'(\d{4})\s+(.+?)｜(\d+)股', label):
+            yield row
+        elif label in ('未持有／預留位置', '尚未建立持股', ''):
+            continue
+        elif row and row[0] == '已知持股成本':
             break
-        yield row
+        else:
+            raise ValueError('Actual holding layout changed; refusing partial valuation')
 
 
 def number(value):

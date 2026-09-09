@@ -2134,9 +2134,9 @@
       "slot_id": 2,
       "event_type": "daily_mark",
       "ticker": "5351",
-      "shares": 21769,
+      "shares": 22405,
       "raw_close": 118.0,
-      "gross_amount": 2568742.0,
+      "gross_amount": 2643790.0,
       "transaction_cost": 0.0,
       "net_amount": 0.0,
       "cash_after": "",
@@ -2171,10 +2171,10 @@
       "gross_amount": 74972.952,
       "transaction_cost": 289.02072996000004,
       "net_amount": 74683.93127004,
-      "cash_after": 75152.72006469668,
+      "cash_after": 74760.77543802334,
       "relative_return_pct": 0.02815824606246431,
       "allocated_cost": 72638.55691092,
-      "remaining_position_cost": 2413633.05534351,
+      "remaining_position_cost": 2486271.61225443,
       "realized_pnl": 2045.3743591200036,
       "reason": "scheduled_withdrawal_funding",
       "signal_date": "2026-09-09"
@@ -2190,7 +2190,7 @@
       "gross_amount": 75000.0,
       "transaction_cost": 0.0,
       "net_amount": -75000.0,
-      "cash_after": 309.71270108001454,
+      "cash_after": 625.7814310400104,
       "relative_return_pct": "",
       "reason": "monthly_second_wednesday_withdrawal",
       "signal_date": "2026-09-09"
@@ -2208,10 +2208,10 @@
     {
       "slot_id": 2,
       "ticker": "5351",
-      "shares": 21133,
-      "position_cost": 2413633.05534351,
+      "shares": 21769,
+      "position_cost": 2486271.61225443,
       "raw_close": 118.0,
-      "slot_cash": 152.72006469668122
+      "slot_cash": 468.78879465667706
     },
     {
       "slot_id": 3,
@@ -2222,7 +2222,7 @@
       "slot_cash": 156.99263638333332
     }
   ],
-  "cash": 309.71270108001454,
+  "cash": 625.7814310400104,
   "pending_orders": [],
   "initial_capital": 7676961.04,
   "capital_migration": {
